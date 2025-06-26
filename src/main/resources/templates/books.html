@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<title>Libri</title>
+	<link rel="stylesheet" href="/stile.css?version=2" />
+</head>
+
+<header>
+	<div><a href="/"><img src="/logo.png" width="10%" /></a></div>
+	<div th:if="${userDetails}">
+		<span th:text="${userDetails.username}">Username</span>
+		<a href="/logout">Logout</a>
+	</div>
+	<div th:unless="${userDetails}">
+		<a href="/login">Login</a>
+	</div>
+	<a href="login"></a>
+</header>
+
+<body>
+	<h1>Libri</h1>
+	<div th:if="${books.isEmpty()}">Non ci sono libri nel sistema</div>
+	<ul>
+		<li th:each="book : ${books}">
+			<span>
+				<a th:href="@{'/book' + '/' + ${book.id}}" th:text="${book.title} + ' (' + ${book.year} + ')'">Up!
+					(2000)</a>
+			</span>
+			<span th:if="${isAdmin}">
+			<!-- Bottone Modifica -->
+			<a th:href="@{'admin/modificaBook/' + ${book.id}}">
+				<button>Modifica</button>
+			</a>
+
+			<!-- Bottone Elimina -->
+			<form th:action="@{'admin/eliminaBook/' + ${book.id}}" method="post" style="display:inline;">
+				<button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo libro? ATTENZIONE: Questa azione è irreversibile');">
+					Elimina
+				</button>
+			</form>
+			</span>
+		</li>
+	</ul>
+</body>
+
+</html>

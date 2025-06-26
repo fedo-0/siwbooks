@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${book.title}">Dettagli Libro</title>
+	<link rel="stylesheet" href="/stile.css">
+</head>
+
+<header>
+    <div><a href="/"><img src="/logo.png" width="10%" /></a></div>
+    <div th:if="${userDetails}">
+        <span th:text="${userDetails.username}">Username</span>
+        <a href="/logout">Logout</a>
+    </div>
+    <div th:unless="${userDetails}">
+        <a href="/login">Login</a>
+    </div>
+</header>
+
+<body>
+
+	<!--Dati Generali-->
+	<h1 th:text="${book.title}">Titolo del Libro</h1>
+	<div th:if="${!isAdmin and userDetails!=null}">
+		<!-- Se l'utente non ha ancora scritto una recensione -->
+		<div th:if="${reviewByUser==null}">
+			<a th:href="@{'/user/formNewReview/' + ${book.id}}">Lascia una recensione</a>
+		</div>
+		<!-- Se l'utente ha gia scritto una recensione -->
+		<div th:if="${reviewByUser!=null}">
+			<span>Hai gia scritto una recensione per questo libro</span>
+			<a th:href="@{'/user/formModificaReview/' + ${book.id}}">Modifica la tua recensione</a>
+		</div>
+	</div>
+	<div th:unless="${userDetails}">
+		<a href="/login">Esegui il Login per lasciare una recensione</a>
+	</div>
+
+	<p><strong>Anno:</strong> <span th:text="${book.year}">2020</span></p>
+
+	<!--Autori-->
+	<div>
+		<h3>Autori:</h3>
+		<ul th:if="${book.authors != null and !book.authors.isEmpty()}">
+			<li th:each="a : ${book.authors}">
+				<a th:href="@{'/author/' + ${a.id}}" th:text="${a.name + ' ' + a.surname}">Nome Cognome</a>
+			</li>
+		</ul>
+		<p th:if="${book.authors == null or book.authors.isEmpty()}">Nessun autore associato.</p>
+	</div>
+
+	<div th:if="${book.imagePaths != null and !book.imagePaths.isEmpty()}">
+		<h3>Immagini:</h3>
+		<div th:each="imgPath : ${book.imagePaths}">
+			<img th:src="@{${imgPath}}" alt="Immagine libro" width="200px" />
+		</div>
+	</div>
+
+	<!-- Recensioni -->
+	<div th:if="${reviewByUser != null or (reviews != null and !reviews.isEmpty())}">
+
+		<!-- Recensione dell'utente autenticato -->
+		<div th:if="${reviewByUser != null}">
+			<h2>La tua Recensione per questo libro</h2>
+			<div>
+				<a th:href="@{'/user/formModificaReview/' + ${book.id}}">
+					<button type="button">Modifica la tua recensione</button>
+				</a>
+
+				<form th:action="@{'/eliminaReview/' + ${reviewByUser.id}}" method="POST">
+					<button type="submit">Elimina la tua recensione</button>
+				</form>
+			</div>
+			<h4 th:text="${reviewByUser.title}">Titolo Recensione</h4>
+			<p><strong>Voto:</strong> <span th:text="${reviewByUser.rating}">8</span>/10</p>
+			<p th:text="${reviewByUser.text}">Testo della recensione</p>
+		</div>
+
+		<!-- Recensioni degli altri utenti -->
+		<div th:if="${reviews != null and !reviews.isEmpty()}">
+			<h2>Recensioni degli utenti</h2>
+			<div th:each="review : ${reviews}" class="review-block">
+				<h4 th:text="${review.title}">Titolo Recensione</h4>
+				<div th:if="${isAdmin}">
+					<form th:action="@{'/eliminaReview/' + ${review.id}}" method="POST">
+						<button type="submit">Elimina la recensione</button>
+					</form>
+				</div>
+				<p><strong>Voto:</strong> <span th:text="${review.rating}">8</span>/10</p>
+				<p th:text="${review.text}">Testo della recensione</p>
+				<p><em>Recensito da:</em>
+					<a th:href="@{/profiloUser/{id}(id=${review.user.id})}"
+						th:text="${review.user.name + ' ' + review.user.surname}">Utente recensione</a>
+				</p>
+				<hr />
+			</div>
+		</div>
+
+	</div>
+
+	</div>
+	<div th:if="${book.reviews == null or book.reviews.isEmpty()}">
+		<h3>Nessuna recensione disponibile per questo libro.</h3>
+	</div>
+
+
+	<p><a href="/books">← Torna alla lista dei libri</a></p>
+</body>
+
+</html>

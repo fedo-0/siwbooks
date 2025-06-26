@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<title>Login</title>
+</head>
+
+<body>
+	<div>
+		<a href="/">Home</a>
+	</div>
+
+	<div th:if="${userDetails}">
+		<span th:text="${userDetails.username}">Username</span>
+		<a href="/logout">Logout</a>
+	</div>
+	<div th:unless="${userDetails}">
+		<a href="/register">Registrati</a>
+	</div>
+	<h1>Accedi al tuo account</h1>
+	<form th:action="@{/login}" method="POST">
+		<div>
+			<label for="username">Username</label>
+			<input name="username" type="text" required placeholder="Inserisci il tuo username" />
+		</div>
+		<div>
+			<label for="password">Password</label>
+			<input name="password" type="password" required placeholder="Inserisci la tua password" id="password"/>
+			<button type="button" onclick="togglePassword('password')" style="right: 2;">
+				Mostra
+			</button>
+		</div>
+		<div th:if="${param.error != null}">
+			<p>Username o password errati</p>
+		</div>
+		<div>
+			<button type="submit">Accedi</button>
+		</div>
+		<div>
+			<span>Non hai un account?</span>
+			<a th:href="@{/register}">Registrati qui</a>
+		</div>
+	</form>
+
+	<script>
+	    function togglePassword(id) {
+	        const input = document.getElementById(id);
+	        const button = input.nextElementSibling;
+	        if (input.type === "password") {
+	            input.type = "text";
+	            button.textContent = "Nascondi";
+	        } else {
+	            input.type = "password";
+	            button.textContent = "Mostra";
+	        }
+	    }
+	</script>
+
+</body>
+
+</html>

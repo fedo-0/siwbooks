@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Registrazione Completata</title>
+</head>
+
+<body>
+
+    <div>
+        <a href="/">Home</a>
+    </div>
+
+    <div th:if="${userDetails}">
+        <span th:text="${userDetails.username}">Username</span>
+        <a href="/logout">Logout</a>
+    </div>
+    <div th:unless="${userDetails}">
+        <a href="/login">Login</a>
+    </div>
+
+    <h1>Registrazione completata</h1>
+    <p>La tua registrazione è stata completata con successo</p>
+
+    <h2>I tuoi dati registrati</h2>
+
+    <div>
+        <div>
+            <label>Nome:</label>
+            <span th:text="${user.name}">Nome Utente</span>
+        </div>
+
+        <div>
+            <label>Cognome:</label>
+            <span th:text="${user.surname}">Cognome Utente</span>
+        </div>
+
+        <div>
+            <label>Email:</label>
+            <span th:text="${user.email}">email@esempio.com</span>
+        </div>
+    </div>
+
+    <div>
+        <h3>Cosa puoi fare ora:</h3>
+        <ul>
+            <li>Esplorare i libri</li>
+            <li>Scrivere recensioni sui tuoi libri preferiti</li>
+            <li>Valutare e condividere le tue esperienze letterarie</li>
+            <li>Scoprire nuovi libri e stili da leggere</li>
+        </ul>
+    </div>
+
+    <div>
+        <a href="/login">Accedi al tuo account</a>
+    </div>
+
+</body>
+
+</html>

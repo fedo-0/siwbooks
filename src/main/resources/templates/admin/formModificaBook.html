@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<title>Modifica Libro</title>
+	<link rel="stylesheet" href="/stile.css?version=3" />
+</head>
+
+<body>
+	<div><a href="/"><img src="/logo.png" width="10%" /></a></div>
+	<h1>Modifica Libro</h1>
+
+	<form th:action="@{'/admin/modificaBook/' + ${book.id}}" method="POST" th:object="${book}" enctype="multipart/form-data">
+
+		<div th:if="${#fields.hasGlobalErrors()}" class="error-message">
+			<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+		</div>
+
+		<div>
+			Titolo:
+			<input type="text" th:field="*{title}" />
+			<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+		</div>
+
+		<!-- Anno -->
+		<div>
+			Anno:
+			<input type="number" th:field="*{year}" step="1" min="0" />
+			<span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
+		</div>
+
+		<!-- Autori -->
+		<div>
+			<h3>Seleziona gli autori del libro:</h3>
+			<div th:if="${allAuthors.isEmpty()}">Non ci sono autori nel sistema</div>
+			<ul th:if="${!allAuthors.isEmpty()}">
+				<li th:each="a : ${allAuthors}">
+					<label>
+						<input type="checkbox" name="authorIds"
+						       th:value="${a.id}" th:checked="${book.authors.contains(a)}" />
+						<span th:text="${a.name + ' ' + a.surname + ' (' + a.nationality + ', ' + a.dateOfBirth + ')'}"></span>
+					</label>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Immagini già esistenti con checkbox per rimuoverle -->
+		<div th:if="${book.imagePaths != null and !book.imagePaths.isEmpty()}">
+			<h3>Immagini attuali:</h3>
+			<ul>
+				<li th:each="img, iter : ${book.imagePaths}">
+					<img th:src="@{${img}}" width="200px" alt="Immagine libro" />
+					<label>
+						<input type="checkbox" name="deleteImages" th:value="${img}" />
+						Rimuovi
+					</label>
+				</li>
+			</ul>
+		</div>
+
+		<!-- Caricamento nuove immagini -->
+		<div>
+			<h3>Carica nuove immagini:</h3>
+			<input id="images" type="file" name="images" multiple accept="image/*" />
+		</div>
+
+		<!-- Pulsante di conferma -->
+		<div>
+			<button type="submit">Salva modifiche</button>
+		</div>
+
+	</form>
+</body>
+
+</html>

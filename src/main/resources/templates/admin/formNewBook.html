@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<title>New Book</title>
+	<link rel="stylesheet" href="/stile.css?version=3" />
+</head>
+
+<body>
+	<div><a href="/"><img src="/logo.png" width="10%" /></a></div>
+	<h1>Aggiungi un Libro</h1>
+	<form th:action="@{/admin/creaBook}" method="POST" th:object="${book}" enctype="multipart/form-data">
+		<div th:if="${#fields.hasGlobalErrors()}" class="error-message">
+			<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+		</div>
+		<div>
+			Titolo: <span><input type="text" th:field="${book.title}" /></span>
+			<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+		</div>
+		<div>
+			Anno: <span><input type="number" th:field="${book.year}" step="1" min="0" /></span>
+			<span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
+		</div>
+		<div>
+			<h3>Seleziona gli autori del libro:</h3>
+			<h4>Autori del sistema:</h4>
+			<div th:if="${allAuthors.isEmpty()}">Non ci sono autori nel sistema</div>
+			<ul th:if="${!allAuthors.isEmpty()}">
+				<li th:each="a : ${allAuthors}">
+					<label>
+						<input type="checkbox" name="authorIds" th:value="${a.id}" />
+						<span
+							th:text="${a.name + ' ' + a.surname + ' (' + a.nationality + ', ' + a.dateOfBirth + ')'}"></span>
+					</label>
+				</li>
+			</ul>
+		</div>
+		<div>
+			<h3>Foto del libro:</h3>
+			<div>
+				<label for="images">Carica immagini:</label>
+				<input id="images" type="file" name="images" multiple accept="image/*" />
+			</div>
+		</div>
+		</div>
+		<div>
+			<span><button type="submit">Conferma</button></span>
+		</div>
+	</form>
+</body>
+
+</html>

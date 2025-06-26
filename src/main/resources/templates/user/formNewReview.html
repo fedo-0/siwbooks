@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <title>Scrivi una recensione</title>
+    <link rel="stylesheet" href="/stile.css?version=2" />
+</head>
+
+<header>
+    <div><a href="/"><img src="/logo.png" width="10%" /></a></div>
+    <div th:if="${userDetails}">
+        <span th:text="${userDetails.username}">Username</span>
+        <a href="/logout">Logout</a>
+    </div>
+    <div th:unless="${userDetails}">
+        <a href="/login">Login</a>
+    </div>
+</header>
+
+<body>
+    <h1>Scrivi una recensione per: <span th:text="${book.title}">Titolo libro</span></h1>
+
+    <form th:action="@{'/user/creaRecensione/' + ${book.id}}" th:object="${review}" method="post">
+        <div>
+            <label for="title">Titolo:</label>
+            <input type="text" id="title" th:field="*{title}" />
+            <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Errore titolo</span>
+        </div>
+
+        <div>
+            <label for="text">Testo:</label>
+            <textarea id="text" th:field="*{text}" rows="5" cols="40"></textarea>
+            <span th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Errore testo</span>
+        </div>
+
+        <div>
+            <label for="rating">Valutazione (1–10):</label>
+            <input type="number" id="rating" th:field="*{rating}" min="1" max="10" step="0.5" />
+            <span th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}">Errore valutazione</span>
+        </div>
+
+        <div th:if="${#fields.hasGlobalErrors()}">
+            <p class="error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore globale</p>
+        </div>
+
+        <button type="submit">Salva recensione</button>
+    </form>
+</body>
+
+</html>

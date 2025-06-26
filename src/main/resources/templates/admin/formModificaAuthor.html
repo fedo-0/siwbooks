@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<title>Modifica Autore</title>
+	<link rel="stylesheet" href="/stile.css?version=3" />
+</head>
+
+<body>
+	<div><a href="/"><img src="/logo.png" width="10%" /></a></div>
+	<h1>Modifica Autore</h1>
+
+	<form th:action="@{'/admin/modificaAuthor/' + ${author.id}}" method="POST"
+	      th:object="${author}" enctype="multipart/form-data">
+
+		<!-- Errori globali -->
+		<div th:if="${#fields.hasGlobalErrors()}" class="error-message">
+			<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+		</div>
+
+		<!-- Nome -->
+		<div>
+			Nome:
+			<input type="text" th:field="*{name}" />
+			<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+		</div>
+
+		<!-- Cognome -->
+		<div>
+			Cognome:
+			<input type="text" th:field="*{surname}" />
+			<span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></span>
+		</div>
+
+		<!-- Data di nascita -->
+		<div>
+			Data di nascita:
+			<input type="date" name="dateOfBirth"
+						       th:value="${#temporals.format(author.dateOfBirth, 'yyyy-MM-dd')}" />
+			<span th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}"></span>
+		</div>
+
+		<!-- Data di morte -->
+		<div>
+			Data della morte:
+			<input type="date" name="dateOfDeath"
+			       th:value="${author.dateOfDeath != null ? #temporals.format(author.dateOfDeath, 'yyyy-MM-dd') : ''}" />
+			<span th:if="${#fields.hasErrors('dateOfDeath')}" th:errors="*{dateOfDeath}"></span>
+		</div>
+
+		<!-- Nazionalità -->
+		<div>
+			Nazionalità:
+			<input type="text" th:field="*{nationality}" />
+			<span th:if="${#fields.hasErrors('nationality')}" th:errors="*{nationality}"></span>
+		</div>
+
+		<!-- Immagine attuale -->
+		<div th:if="${author.imagePath != null}">
+			<h3>Immagine attuale:</h3>
+			<img th:src="@{${author.imagePath}}" width="200px" alt="Immagine autore" />
+			<label>
+				<input type="checkbox" name="deleteImage" value="true" />
+				Rimuovi immagine
+			</label>
+		</div>
+
+		<!-- Caricamento nuova immagine -->
+		<div>
+			<h3>Carica nuova immagine:</h3>
+			<input id="image" type="file" name="image" accept="image/*" />
+		</div>
+
+		<!-- Pulsante di conferma -->
+		<div>
+			<button type="submit">Salva modifiche</button>
+		</div>
+
+	</form>
+</body>
+
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Registrazione</title>
+</head>
+
+<body>
+
+	<div>
+		<a href="/">Home</a>
+	</div>
+
+	<div th:if="${userDetails}">
+		<span th:text="${userDetails.username}">Username</span>
+		<a href="/logout">Logout</a>
+	</div>
+	<div th:unless="${userDetails}">
+		<a href="/login">Login</a>
+	</div>
+
+	<h1>Registrazione nuovo utente</h1>
+
+	<form th:action="@{/register}" method="POST">
+
+		<div>
+			<label for="name">Nome</label>
+			<input type="text" placeholder="Nome" th:field="${user.name}" />
+			<span th:if="${#fields.hasErrors('user.name')}" th:errors="${user.name}"></span>
+		</div>
+
+		<div>
+			<label for="surname">Cognome</label>
+			<input type="text" placeholder="Cognome" th:field="${user.surname}" />
+			<span th:if="${#fields.hasErrors('user.surname')}" th:errors="${user.surname}"></span>
+		</div>
+
+		<div>
+			<label for="email">Email</label>
+			<input type="email" placeholder="email@example.com" th:field="${user.email}" />
+			<span th:if="${#fields.hasErrors('user.email')}" th:errors="${user.email}"></span>
+		</div>
+
+		<div>
+			<label for="username">Username</label>
+			<input type="text" placeholder="Username" th:field="${credentials.username}" />
+			<span th:if="${#fields.hasErrors('credentials.username')}" th:errors="${credentials.username}"></span>
+		</div>
+
+		<div>
+			<label for="password">Password</label>
+			<input type="password" placeholder="Password" th:field="${credentials.password}" id="password"/>
+			<button type="button" onclick="togglePassword('password', this)" style="right: 2;">
+				Mostra
+			</button>
+			<span th:if="${#fields.hasErrors('credentials.password')}" th:errors="${credentials.password}"></span>
+		</div>
+
+		<div>
+			<label for="confirmPassword">Conferma Password</label>
+			<input type="password" placeholder="Conferma Password" name="confirmPassword" id="confermaPassword" />
+			<button type="button" onclick="togglePassword('confermaPassword', this)" style="right: 2;">
+				Mostra
+			</button>
+			<span th:if="${confirmPasswordError}" th:text="${confirmPasswordError}"></span>
+		</div>
+
+		<div>
+			<button type="submit">Registra</button>
+		</div>
+	</form>
+
+
+	<script>
+		function togglePassword(inputId, button) {
+			const input = document.getElementById(inputId);
+			if (input.type === "password") {
+				input.type = "text";
+				button.textContent = "Nascondi";
+			} else {
+				input.type = "password";
+				button.textContent = "Mostra";
+			}
+		}
+	</script>
+</body>
+
+</html>

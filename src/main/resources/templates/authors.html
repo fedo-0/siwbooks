@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Lista Autori</title>
+	<link rel="stylesheet" href="/stile.css">
+</head>
+
+<header>
+    <div><a href="/"><img src="/logo.png" width="10%" /></a></div>
+    <div th:if="${userDetails}">
+        <span th:text="${userDetails.username}">Username</span>
+        <a href="/logout">Logout</a>
+    </div>
+    <div th:unless="${userDetails}">
+        <a href="/login">Login</a>
+    </div>
+</header>
+
+<body>
+	<h1>Lista degli Autori</h1>
+
+	<div th:if="${authors.isEmpty()}">
+		<p>Non ci sono autori nel sistema.</p>
+	</div>
+
+	<ul th:if="${!authors.isEmpty()}">
+		<li th:each="a : ${authors}">
+			<a th:href="@{'/author/' + ${a.id}}">
+				<span th:text="${a.name} + ' ' + ${a.surname}">Nome Cognome</span>
+			</a>
+			<span> - </span>
+			<span th:text="${a.nationality}">Nazionalità</span>
+			<span th:if="${isAdmin}">
+				<!-- Bottone Modifica -->
+				<a th:href="@{'admin/modificaAuthor/' + ${a.id}}">
+					<button>Modifica</button>
+				</a>
+
+				<!-- Bottone Elimina -->
+				<form th:action="@{'admin/eliminaAuthor/' + ${a.id}}" method="post" style="display:inline;">
+					<button type="submit"
+						onclick="return confirm('Sei sicuro di voler eliminare questo autore? ATTENZIONE: Questa azione è irreversibile');">
+						Elimina
+					</button>
+				</form>
+			</span>
+		</li>
+	</ul>
+</body>
+
+</html>

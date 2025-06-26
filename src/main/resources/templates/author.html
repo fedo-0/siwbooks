@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+	<meta charset="UTF-8">
+	<title th:text="${author.name} + ' ' + ${author.surname}">Autore</title>
+	<link rel="stylesheet" href="/stile.css">
+</head>
+
+<header>
+    <div><a href="/"><img src="/logo.png" width="10%" /></a></div>
+    <div th:if="${userDetails}">
+        <span th:text="${userDetails.username}">Username</span>
+        <a href="/logout">Logout</a>
+    </div>
+    <div th:unless="${userDetails}">
+        <a href="/login">Login</a>
+    </div>
+</header>
+
+<body>
+	<h1 th:text="${author.name} + ' ' + ${author.surname}">Nome Cognome</h1>
+
+	<p><strong>Nazionalità:</strong> <span th:text="${author.nationality}">Italiana</span></p>
+	<p><strong>Data di nascita:</strong>
+		<span th:text="${#temporals.format(author.dateOfBirth, 'dd/MM/yyyy')}"></span>
+	<p th:if="${author.dateOfDeath != null}">
+	  <strong>Data della morte:</strong> 
+	  <span th:text="${#temporals.format(author.dateOfDeath, 'dd/MM/yyyy')}"></span>
+	</p>
+	<h2>Libri scritti</h2>
+	<ul th:if="${author.books != null and !author.books.isEmpty()}">
+		<li th:each="book : ${author.books}">
+			<a th:href="@{'/book/' + ${book.id}}" th:text="${book.title}">Titolo Libro</a>
+		</li>
+	</ul>
+	<p th:if="${author.books == null or author.books.isEmpty()}">Questo autore non ha ancora scritto libri.</p>
+	<div th:if="${author.imagePath != null}">
+	    <h3>Immagine:</h3>
+	    <img th:src="@{${author.imagePath}}" alt="Immagine Autore" width="200px" />
+	</div>
+	<p><a href="/authors">← Torna alla lista degli autori</a></p>
+</body>
+
+</html>

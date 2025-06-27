@@ -11,6 +11,8 @@
 	<div th:if="${userDetails}">
 		<span th:text="${userDetails.username}">Username</span>
 		<a href="/logout">Logout</a>
+		<div><a th:href="@{/profiloUser/{id}(id=${userId})}">
+			Il tuo profilo</a></div>
 	</div>
 	<div th:unless="${userDetails}">
 		<a href="/login">Login</a>
@@ -24,6 +26,9 @@
 	</h1>
 	<h1>
 		<a href="authors"> Visualizza la lista di autori </a>
+	</h1>
+	<h1>
+		<a href="formSearchBook"> Cerca un libro </a>
 	</h1>
 </body>
 

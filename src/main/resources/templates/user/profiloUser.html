@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="it" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Profilo utente</title>
+</head>
+
+<body>
+	<header>
+		<a href="/"><img src="/logo.png" alt="SiwBooks" width="10%" /></a>
+		<span>SiwBooks</span>
+
+		<div th:if="${userDetails}">
+			<span th:text="${userDetails.username}">Username</span>
+			<a href="/logout">Logout</a>
+		</div>
+		<div th:unless="${userDetails}">
+			<a href="/login">Login</a>
+		</div>
+	</header>
+
+	<main>
+		<!--<div th:unless="${admin}">-->
+		<div th:if="${user}">
+			<h1 th:text="'Profilo di ' + ${credentials.username}">Profilo Utente</h1>
+
+			<p><strong>Nome utente:</strong> <span th:text="${credentials.username}">Username</span></p>
+			<p th:if="${user.name}"><strong>Nome:</strong> <span th:text="${user.name}">Nome</span></p>
+			<p th:if="${user.surname}"><strong>Cognome:</strong> <span th:text="${user.surname}">Cognome</span></p>
+			<p th:if="${user.email}"><strong>Email:</strong> <span th:text="${user.email}">Email</span></p>
+
+			<!--<div th:if="${isOwnProfile}">
+                <p><strong>Azioni:</strong></p>
+                <a th:href="@{/profiloUser/{id}/modificaProfilo(id=${user.id})}">Modifica il tuo profilo</a>
+                <a th:href="@{/profiloUser/{id}/modificaPassword(id=${user.id})}">Modifica la tua password</a>
+            </div>-->
+			<div th:if="${isOwnProfile}">
+				<h2>Le Mie Recensioni</h2>
+			</div>
+			<div th:unless="${isOwnProfile}">
+				<h2>Le Recensioni dell'Utente</h2>
+			</div>
+			<div th:if="${user.reviews.isEmpty()}">
+				<p>Non ci sono recensioni per questo utente</p>
+				<a href="/books">Vai ai libri</a>
+			</div>
+
+			<div th:unless="${user.reviews.isEmpty()}">
+				<p th:text="'Recensioni totali: ' + ${user.reviews.size()}">Numero recensioni</p>
+
+				<div th:each="review : ${user.reviews}">
+					<h3 th:text="${review.title}">Titolo recensione</h3>
+					<p th:text="'Voto: ' + ${review.rating} + '/10'">Voto</p>
+					<p><strong>Libro:</strong>
+						<a th:href="@{/book/{id}(id=${review.book.id})}" th:text="${review.book.title}">Titolo
+							Libro</a>
+					</p>
+					<p th:text="${review.text}">Testo recensione</p>
+
+					<div th:if="${isOwnProfile}">
+						<form th:action="@{'/eliminaReview/' + ${review.id}}" method="POST">
+							<button type="submit">Elimina la tua recensione</button>
+						</form>
+						<a th:href="@{'/user/formModificaReview/' + ${review.book.id}}">
+							Modifica recensione
+						</a>
+					</div>
+					<div th:if="${admin}">
+						<form th:action="@{'/eliminaReview/' + ${review.id}}" method="POST">
+							<button type="submit">Elimina la tua recensione</button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<!--</div>-->
+
+			<div th:unless="${user}">
+				<h2>Utente non trovato</h2>
+				<p>L'utente che stai cercando non esiste</p>
+				<a href="/">Torna alla homepage</a>
+			</div>
+		</div>
+	</main>
+</body>
+
+</html>

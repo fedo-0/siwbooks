@@ -37,7 +37,9 @@
 		<a href="/login">Esegui il Login per lasciare una recensione</a>
 	</div>
 
-	<p><strong>Anno:</strong> <span th:text="${book.year}">2020</span></p>
+	<p><strong>Anno:</strong>
+		<a th:href="@{'/booksByYear/' + ${book.year}}" th:text="${book.year}">
+			2020</a></p>
 
 	<!--Autori-->
 	<div>

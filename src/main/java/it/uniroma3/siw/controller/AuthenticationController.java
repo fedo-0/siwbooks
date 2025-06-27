@@ -56,7 +56,7 @@ public class AuthenticationController {
 		if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
 			return "admin/indexAdmin.html";
 		}
-		model.addAttribute("id", credentials.getId());
+		model.addAttribute("userId", credentials.getId());
 
 		return "index.html";
 	}
@@ -65,11 +65,12 @@ public class AuthenticationController {
 	public String defaultAfterLogin(Model model) {
 		UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
-		if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
-			return "admin/indexAdmin.html";
-		}
+//		if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
+//			return "admin/indexAdmin.html";
+//			return "admin/indexAdmin.html";
+//		}
 		model.addAttribute("id", credentials.getId());
-		return "index.html";
+		return "redirect:/";
 	}
 
 	@PostMapping(value = { "/register" })

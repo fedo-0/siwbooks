@@ -1,5 +1,6 @@
 package it.uniroma3.siw.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,32 +37,25 @@ public class BookService {
 	}
 
 	public long getTotalBooks() {
-		return bookRepository.count();
+		return this.bookRepository.count();
 	}
-
-//**** FUNZIONI PER IL SEARCH ****//
 	
 	/**
-	 * Ricerca gli annunci applicando i filtri opzionali definiti nel repository.
+	 * Ricerca i libri applicando i filtri opzionali definiti nel repository.
 	 * 
-	 * @param citta la città dell'annuncio
-	 * @return lista di annunci che corrispondono ai filtri
+	 * @param name il nome del libro
+	 * @return lista di libri che corrispondono ai filtri
 	 */
-//	public List<Book> findByFilters(String city, String type) {
-//		return bookRepository.findByFilters(city, type);
-//	}
+	public List<Book> findByFilters(String title, Integer year) {
+		return this.bookRepository.findByFilters(title, year);
+	}
 
-	/**
-	 * Verifica se esiste già un annuncio con i dati specificati.
-	 * 
-	 * @param citta     la città
-	 * @return true se esiste un annuncio con questi dati, false altrimenti
-	 */
-//	public boolean existsByCity(String city, String type) {
-//		return bookRepository.existsByCityAndType(city, type);
-//	}
 
 	public boolean existsByTitleAndYear(String title, Integer year) {
 		return this.bookRepository.existsByTitleAndYear(title, year);
+	}
+	
+	public Iterable<Book> getBooksByYear(Integer year) {
+		return this.bookRepository.findByYear(year);
 	}
 }

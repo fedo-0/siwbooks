@@ -52,13 +52,14 @@ public class AuthConfiguration {
 				// chiunque (autenticato o no) può accedere alle pagine index, login, register,
 				// ai css e alle immagini
 				.requestMatchers(HttpMethod.GET, "/profiloUser/**",
-						"/index", "/book/**", "/books", "/author/**", "/authors",
+						"/index", "/book/**", "/books", "/booksByYear/**", "/formSearchBook",
+						"/author/**", "/authors",
 						"/register", "/css/**", "/images/**",
 						"stile.css", "/logo.png", "favicon.ico")
 				.permitAll()
 				// chiunque (autenticato o no) può mandare richieste POST al punto di accesso
 				// per login e register
-				.requestMatchers(HttpMethod.POST, "/register", "/login").permitAll()
+				.requestMatchers(HttpMethod.POST, "/register", "/login", "/cercaBooks").permitAll()
 				.requestMatchers(HttpMethod.GET, "/user/**").hasAuthority(DEFAULT_ROLE)
 				.requestMatchers(HttpMethod.POST, "/user/**").hasAuthority(DEFAULT_ROLE)
 				.requestMatchers(HttpMethod.GET, "/admin/**").hasAuthority(ADMIN_ROLE)

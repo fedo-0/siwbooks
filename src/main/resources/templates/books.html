@@ -19,7 +19,13 @@
 </header>
 
 <body>
-	<h1>Libri</h1>
+	<div th:if="${year}">
+		<h1 th:text="'Libri del ' + ${year}">Libri di un anno</h1>
+	</div>
+	<div th:unless="${year}">
+		<h1>Libri</h1>
+	</div>
+	<div th:if="${bookNumber!=null}" th:text="'Sono stati trovati '+ ${bookNumber} + ' libri'">Numero Libri</div>
 	<div th:if="${books.isEmpty()}">Non ci sono libri nel sistema</div>
 	<ul>
 		<li th:each="book : ${books}">
@@ -28,17 +34,18 @@
 					(2000)</a>
 			</span>
 			<span th:if="${isAdmin}">
-			<!-- Bottone Modifica -->
-			<a th:href="@{'admin/modificaBook/' + ${book.id}}">
-				<button>Modifica</button>
-			</a>
+				<!-- Bottone Modifica -->
+				<a th:href="@{'admin/modificaBook/' + ${book.id}}">
+					<button>Modifica</button>
+				</a>
 
-			<!-- Bottone Elimina -->
-			<form th:action="@{'admin/eliminaBook/' + ${book.id}}" method="post" style="display:inline;">
-				<button type="submit" onclick="return confirm('Sei sicuro di voler eliminare questo libro? ATTENZIONE: Questa azione è irreversibile');">
-					Elimina
-				</button>
-			</form>
+				<!-- Bottone Elimina -->
+				<form th:action="@{'admin/eliminaBook/' + ${book.id}}" method="post" style="display:inline;">
+					<button type="submit"
+						onclick="return confirm('Sei sicuro di voler eliminare questo libro? ATTENZIONE: Questa azione è irreversibile');">
+						Elimina
+					</button>
+				</form>
 			</span>
 		</li>
 	</ul>

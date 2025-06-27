@@ -39,7 +39,6 @@ public class BookController {
 	public static final String FOLD = "books";
 	@Autowired
 	private ImageService imageService;
-	
 	@Autowired
 	private BookService bookService;
 	@Autowired
@@ -75,6 +74,7 @@ public class BookController {
 	public String mostraLibri(Model model) {
 		model.addAttribute("isAdmin", this.userService.checkPermessiAdmin());
 		model.addAttribute("books", this.bookService.getAllBooks());
+		model.addAttribute("bookNumber", this.bookService.getTotalBooks());
 		return "books.html";
 	}
 	
@@ -182,6 +182,41 @@ public class BookController {
 		this.imageService.eliminaImmagini(this.bookService.getBookById(id).getImagePaths());
 		this.bookService.deleteById(id);
 		return "redirect:/books";
+	}
+	
+	@GetMapping("/booksByYear/{year}")
+	public String mostraLibriPerAnno (@PathVariable("year") Integer year, Model model) {
+		if (this.bookService.getBooksByYear(year)==null) return "redirect:/books";
+		model.addAttribute("isAdmin", this.userService.checkPermessiAdmin());
+		model.addAttribute("books", this.bookService.getBooksByYear(year));
+		model.addAttribute("year", year);
+		return "books.html";
+	}
+	
+	@GetMapping("/formSearchBook")
+	public String filtraLibri(Model model) {
+		model.addAttribute("year", null);
+		model.addAttribute("title", null);
+	    return "formSearchBook.html";
+	}
+	
+	@PostMapping("/cercaBooks")
+	public String cercaBooks (@RequestParam(required = false) String title,
+			@RequestParam(required = false) String year, Model model) {
+		if (title==null && year==null) return "redirect:/books";
+		if (title!=null) {
+			title = title.trim();
+			if (title.isEmpty()) title=null;
+		}
+		Integer parsed = null;
+		if (year != null && !year.trim().isEmpty()) {
+			parsed = Integer.parseInt(year.trim());
+		}
+		System.out.println("\n\nTitle passato alla query: '" + title + "'");
+		System.out.println("Year passato alla query: " + parsed);
+		model.addAttribute("isAdmin", this.userService.checkPermessiAdmin());
+		model.addAttribute("books", this.bookService.findByFilters(title, parsed));
+		return "books.html";
 	}
 	
 }

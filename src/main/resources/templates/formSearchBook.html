@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="it">
- 
 
 <head>
-	    <title>Home SIW Books</title>
+	<title>Libri</title>
 	<link rel="stylesheet" href="/stile.css?version=2" />
 </head>
+
 <header>
 	<div><a href="/"><img src="/logo.png" width="10%" /></a></div>
 	<div th:if="${userDetails}">
@@ -16,25 +16,22 @@
 		<a href="/login">Login</a>
 	</div>
 	<a href="login"></a>
-	<h2>Gestisci i libri nel sistema</h2>
 </header>
 
 <body>
-	<h1>
-		<a href="books"> Visualizza la lista di libri </a>
-	</h1>
-	<h1>
-		<a href="admin/formNewBook"> Crea un nuovo libro </a>
-	</h1>
-	<h1>
-		<a href="authors"> Visualizza tutti gli autori </a>
-	</h1>
-	<h1>
-		<a href="admin/formNewAuthor"> Crea un nuovo autore </a>
-	</h1>
-	<h1>
-		<a href="formSearchBook"> Cerca un libro </a>
-	</h1>
+
+
+	<form th:action="@{/cercaBooks}" method="post">
+		<label for="title">Titolo:</label>
+		<input type="text" id="title" name="title" />
+
+		<label for="year">Anno:</label>
+		<input type="number" id="year" name="year" />
+
+		<button type="submit">Cerca</button>
+	</form>
+
+
 </body>
 
 </html>

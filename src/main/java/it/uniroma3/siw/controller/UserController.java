@@ -34,20 +34,12 @@ public class UserController {
 	private PasswordEncoder passwordEncoder;
 
 	@GetMapping("/profiloUser/{id}")
-	public String mostraProfiloUtente(@PathVariable("id") Long userId, Model model) {
+	public String mostraProfiloUser(@PathVariable("id") Long userId, Model model) {
 		User user = this.userService.getUser(userId);
-		if (user == null) {
-			model.addAttribute("user", null);
-			return "profiloUser.html";
-		}
+		if (user == null) return "redirect:/";
 
 		Credentials credentials = this.credentialsService.getCredentials(userId);
-
-		if (credentials.getRole().equals(Credentials.ADMIN_ROLE)) {
-			model.addAttribute("admin", true);
-			return "profiloUser.html";
-		}
-
+		
 		Long actualUserId = null;
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		if (!(authentication instanceof AnonymousAuthenticationToken)) {
@@ -58,16 +50,17 @@ public class UserController {
 			}
 		}
 
-		boolean isOwnProfile = (actualUserId != null && actualUserId.equals(userId));
+		boolean isOwnProfile = (actualUserId != null && actualUserId.equals(userId) && this.userService.checkPermessiAdmin());
 
-		model.addAttribute("admin", false);
+		model.addAttribute("admin", this.userService.checkPermessiAdmin());
 		model.addAttribute("user", user);
 		model.addAttribute("isOwnProfile", isOwnProfile);
 		model.addAttribute("credentials", credentials);
 
-		return "profiloUser.html";
+		return "user/profiloUser.html";
 	}
 
+	/*
 	@GetMapping("/profiloUser/{id}/modificaProfilo")
 	public String modificaProfilo(@PathVariable("id") Long userId, Model model) {
 		Long currentUserId = null;
@@ -159,5 +152,5 @@ public class UserController {
 		this.credentialsService.saveCredentials(updated);
 		return "redirect:/profiloUser/" + c.getId();
 	}
-
+*/
 }

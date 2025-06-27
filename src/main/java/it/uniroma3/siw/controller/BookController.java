@@ -216,7 +216,9 @@ public class BookController {
 		System.out.println("Year passato alla query: " + parsed);
 		model.addAttribute("isAdmin", this.userService.checkPermessiAdmin());
 		model.addAttribute("books", this.bookService.findByFilters(title, parsed));
-		return "books.html";
+		model.addAttribute("year", parsed);
+		model.addAttribute("title", title);
+		return "searchResult.html";
 	}
 	
 }

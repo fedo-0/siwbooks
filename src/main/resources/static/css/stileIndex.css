@@ -1,0 +1,509 @@
+/* Reset e impostazioni base */
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	line-height: 1.6;
+	color: #333;
+	background-color: #ffffff; /* sfondo bianco */
+}
+
+/* Header */
+.header {
+	background-color: #2f2f2f; /* grigio scuro */
+	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+	position: sticky;
+	top: 0;
+	z-index: 100;
+}
+
+.header-container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 1rem 2rem;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	position: relative;
+}
+
+.title-section {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+	color: white;
+}
+
+.logo-section {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+}
+
+.logo {
+	height: 30px;
+	width: auto;
+}
+
+.site-name {
+	font-size: 1.5rem;
+	color: white;
+	font-weight: bold;
+}
+
+.logo-link {
+	text-decoration: none;
+}
+
+.search-button {
+	margin-top: 2rem;
+	text-decoration: none;
+	background-color: #00b3b3; /* verde acqua */
+	color: white;
+	padding: 0.75rem 1.5rem;
+	border-radius: 25px;
+	font-size: 1rem;
+	font-weight: 500;
+	transition: all 0.3s ease;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	white-space: nowrap;
+}
+
+.search-button:hover {
+	background-color: #009999;
+	transform: scale(1.05);
+}
+
+.user-section {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+}
+
+.user-info {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 0.3rem;
+}
+
+.username {
+	font-weight: 600;
+	color: white;
+	font-size: 1rem;
+}
+
+.profile-link,
+.login-link {
+	text-decoration: none;
+	color: #00b3b3;
+	font-weight: 500;
+	font-size: 0.9rem;
+	transition: all 0.3s ease;
+}
+
+.profile-link:hover,
+.login-link:hover {
+	color: #009999;
+	text-decoration: underline;
+}
+
+/* Main Content */
+.main-content {
+	min-height: calc(100vh - 140px);
+	padding: 2rem 0;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 0 2rem;
+}
+
+.welcome-section {
+	text-align: center;
+	margin-bottom: 3rem;
+}
+
+.welcome-title {
+	font-size: 2rem;
+	font-weight: 700;
+	color: #2f2f2f;
+	margin-bottom: 1rem;
+}
+
+.welcome-description {
+	font-size: 1.2rem;
+	color: #555;
+	max-width: 600px;
+	margin: 0 auto;
+}
+
+.preview-section {
+    margin-bottom: 3rem;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.section-header h2 {
+    font-size: 1.5rem;
+    color: #2c2c2c;
+}
+
+.section-link {
+    font-size: 0.95rem;
+    color: #00b3b3;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.section-link:hover {
+    text-decoration: underline;
+}
+
+.preview-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+}
+
+.book-card {
+    display: flex;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+    margin-bottom: 2rem;
+    border: 1px solid #dcdcdc;
+}
+
+.book-image {
+    flex: 0 0 150px;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid #00b3b3;
+    padding: 0.5rem;
+}
+
+.book-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.book-placeholder {
+    font-size: 3rem;
+    color: #ccc;
+    text-align: center;
+}
+
+.book-info {
+    flex: 1;
+    padding: 1rem;
+}
+
+.book-info h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    color: #333;
+}
+
+.book-info a {
+    text-decoration: none;
+    color: #00b3b3;
+    font-weight: 600;
+}
+
+.book-info a:hover {
+    text-decoration: underline;
+}
+
+.book-info p {
+    margin-bottom: 0.3rem;
+    color: #555;
+}
+
+.author-card {
+    display: flex;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+    margin-bottom: 2rem;
+    border: 1px solid #dcdcdc;
+}
+
+.author-image {
+    flex: 0 0 150px;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-right: 2px solid #00b3b3;
+    padding: 0.5rem;
+}
+
+.author-image img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 4px;
+}
+
+.author-placeholder {
+    font-size: 3rem;
+    color: #ccc;
+    text-align: center;
+}
+
+.author-info {
+    flex: 1;
+    padding: 1rem;
+}
+
+.author-info h3 {
+    margin-bottom: 0.5rem;
+    font-size: 1.2rem;
+    color: #00b3b3;
+}
+
+.author-info a {
+    text-decoration: none;
+    color: #00b3b3;
+    font-weight: 600;
+}
+
+.author-info a:hover {
+    text-decoration: underline;
+}
+
+.author-info p {
+    margin-bottom: 0.3rem;
+    color: #555;
+}
+
+/* Divider Section */
+.divider-section {
+	position: relative;
+	text-align: center;
+	margin: 40px 0;
+}
+
+.divider-line {
+	border: none;
+	border-top: 2px solid #e0e0e0;
+	margin: 0;
+}
+
+.divider-text-container {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: #fff;
+	padding: 0 20px;
+	font-size: 0.9em; /* ridotto */
+	font-weight: normal; /* niente grassetto */
+	border-radius: 999px;
+	box-shadow: 0 0 3px rgba(0,0,0,0.1);
+}
+
+.divider-link {
+	color: #00b3b3;
+	text-decoration: none;
+	font-weight: normal; /* niente grassetto */
+	margin-left: 5px;
+	font-size: 0.9em; /* uniforma al resto */
+}
+
+.divider-link:hover {
+	text-decoration: underline;
+}
+
+/* ADMIN */
+.admin-section {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.admin-link {
+	background-color: #ffa500;
+	color: white;
+	padding: 6px 12px;
+	border-radius: 20px;
+	text-decoration: none;
+	font-size: 0.85em;
+	transition: background-color 0.3s;
+}
+
+.admin-link:hover {
+	background-color: #ff9000;
+}
+
+.user-admin-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+
+/* Funzioni principali */
+.main-functions {
+	display: flex;
+	justify-content: center;
+	gap: 2rem;
+	flex-wrap: wrap;
+	margin-top: 3rem;
+}
+
+.book-list, .author-list {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 0.5rem;
+}
+
+.book-card, .author-card {
+  flex: 0 0 auto;
+  width: 300px;
+  height: 180px;
+}
+
+.function-card {
+	background-color: white;
+	border-radius: 15px;
+	padding: 2rem;
+	text-align: center;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+	transition: all 0.3s ease;
+	max-width: 300px;
+	flex: 1;
+	min-width: 250px;
+	border: 2px solid transparent;
+}
+
+.function-card:hover {
+	transform: translateY(-5px);
+	box-shadow: 0 10px 30px rgba(0, 179, 179, 0.2);
+	border-color: #00b3b3;
+}
+
+.function-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+	display: block;
+}
+
+.function-title {
+	font-size: 1.5rem;
+	font-weight: 600;
+	color: #2f2f2f;
+	margin-bottom: 1rem;
+}
+
+.function-description {
+	color: #666;
+	margin-bottom: 1.5rem;
+	line-height: 1.5;
+}
+
+.function-link {
+	display: inline-block;
+	text-decoration: none;
+	background-color: #00b3b3;
+	color: white;
+	padding: 0.75rem 2rem;
+	border-radius: 25px;
+	font-weight: 500;
+	transition: all 0.3s ease;
+}
+
+.function-link:hover {
+	background-color: #009999;
+	transform: scale(1.05);
+}
+
+/* Footer */
+.footer {
+	background-color: #2f2f2f;
+	color: white;
+	text-align: center;
+	padding: 2rem 0;
+	margin-top: 3rem;
+}
+
+.footer p {
+	color: #ccc;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+	.header-container {
+		flex-direction: column;
+		text-align: center;
+		gap: 1rem;
+	}
+
+	.logo-section {
+		justify-content: center;
+	}
+
+	.user-info {
+		align-items: center;
+	}
+
+	.welcome-title {
+		font-size: 2rem;
+	}
+
+	.main-functions {
+		flex-direction: column;
+		align-items: center;
+	}
+
+	.function-card {
+		max-width: 100%;
+	}
+
+	.container {
+		padding: 0 1rem;
+	}
+}
+
+@media (max-width: 480px) {
+	.header-container {
+		padding: 1rem;
+	}
+
+	.site-name {
+		font-size: 1.2rem;
+	}
+
+	.welcome-title {
+		font-size: 1.8rem;
+	}
+
+	.function-card {
+		padding: 1.5rem;
+	}
+}

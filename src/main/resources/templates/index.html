@@ -1,35 +1,136 @@
 <!DOCTYPE html>
 <html lang="it">
- 
 
 <head>
-	    <title>Home SIW Books</title>
-	<link rel="stylesheet" href="/stile.css?version=2" />
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Home SIW Books</title>
+	<link rel="stylesheet" href="css/stileIndex.css">
 </head>
-<header>
-	<div><a href="/"><img src="/logo.png" width="10%" /></a></div>
-	<div th:if="${userDetails}">
-		<span th:text="${userDetails.username}">Username</span>
-		<a href="/logout">Logout</a>
-		<div><a th:href="@{/profiloUser/{id}(id=${userId})}">
-			Il tuo profilo</a></div>
-	</div>
-	<div th:unless="${userDetails}">
-		<a href="/login">Login</a>
-	</div>
-	<a href="login"></a>
-</header>
 
 <body>
-	<h1>
-		<a href="books"> Visualizza la lista di libri </a>
-	</h1>
-	<h1>
-		<a href="authors"> Visualizza la lista di autori </a>
-	</h1>
-	<h1>
-		<a href="formSearchBook"> Cerca un libro </a>
-	</h1>
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
+				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
+
+			<div class="title-section">
+				<h1 class="page-title">Home</h1>
+			</div>
+
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div class="user-info">
+						<span th:text="${userDetails.username}" class="username">Username</span>
+						<a th:href="@{/profiloUser/{id}(id=${userId})}" class="profile-link">Il mio profilo</a>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/login" class="login-link">Login</a>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<main class="main-content">
+		<div class="container">
+			<section class="welcome-section">
+				<h2 class="welcome-title">Parlaci dei tuoi libri preferiti!</h2>
+				<p class="welcome-description">Scopri, leggi e lascia una recensione</p>
+				<a href="/formSearchBook" class="search-button">🔍 Cerca un libro</a>
+			</section>
+
+			<!-- LIBRI -->
+			<section class="preview-section">
+				<div class="section-header">
+					<h2>I nostri libri:</h2>
+					<a href="/books" class="section-link">Vedi tutti</a>
+				</div>
+				<div class="preview-grid">
+					<div class="book-list">
+						<div th:each="book, iterStat : ${allBooks}" th:if="${iterStat.index < 4}" class="book-card">
+
+							<div class="book-card">
+								<div class="book-image">
+									<img th:if="${book.imagePaths != null and !book.imagePaths.isEmpty()}"
+										th:src="@{${book.imagePaths[0]}}" alt="Copertina libro" />
+
+									<div class="book-placeholder"
+										th:if="${book.imagePaths == null or book.imagePaths.isEmpty()}">
+										📖
+									</div>
+								</div>
+
+								<div class="book-info">
+									<h3>
+										<a th:href="@{/book/{id}(id=${book.id})}" th:text="${book.title}">Titolo</a>
+									</h3>
+									<p th:text="'Anno: ' + ${book.year}">Anno: 2024</p>
+									<p>
+										<span>Autori:</span>
+										<span th:each="author : ${book.authors}"
+											th:text="${author.name} + ' ' + ${author.surname} + ', '">Autore</span>
+									</p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<div class="divider-section">
+				<hr class="divider-line">
+				<div class="divider-text-container">
+					<span>Hai letto qualcosa di recente?
+						<a href="/formSearchBook" class="divider-link">Raccontacelo</a>
+					</span>
+				</div>
+			</div>
+
+			<!-- AUTORI -->
+			<section class="preview-section">
+				<div class="section-header">
+					<h2>I nostri autori:</h2>
+					<a href="/authors" class="section-link">Vedi tutti</a>
+				</div>
+				<div class="preview-grid">
+					<div class="author-list">
+						<div th:each="author, iterStat : ${allAuthors}" th:if="${iterStat.index < 4}"
+							class="author-card">
+							<div class="author-image">
+								<img th:if="${author.imagePath != null}" th:src="@{${author.imagePath}}"
+									alt="Foto autore" />
+								<div class="author-placeholder" th:if="${author.imagePath == null}">
+									👤
+								</div>
+							</div>
+							<div class="author-info">
+								<h3>
+									<a th:href="@{/author/{id}(id=${author.id})}"
+										th:text="${author.name + ' ' + author.surname}">Nome Cognome</a>
+								</h3>
+								<p>
+									<span>Libri:</span><br />
+									<span th:each="book : ${author.books}"
+										th:text="${book.title + ' (' + book.year + ')'}"></span><br />
+								</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+
+	<footer class="footer">
+		<div class="container">
+			<p>&copy; 2024 SIW Books. Tutti i diritti riservati.</p>
+		</div>
+	</footer>
 </body>
 
 </html>

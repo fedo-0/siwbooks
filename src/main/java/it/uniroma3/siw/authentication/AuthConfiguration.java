@@ -55,7 +55,7 @@ public class AuthConfiguration {
 						"/index", "/book/**", "/books", "/booksByYear/**", "/formSearchBook",
 						"/author/**", "/authors",
 						"/register", "/css/**", "/images/**",
-						"stile.css", "/logo.png", "favicon.ico")
+						"/logo.png", "favicon.ico")
 				.permitAll()
 				// chiunque (autenticato o no) può mandare richieste POST al punto di accesso
 				// per login e register

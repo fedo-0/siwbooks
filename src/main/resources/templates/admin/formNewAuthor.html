@@ -3,45 +3,143 @@
 
 <head>
 	<title>New Author</title>
-	<link rel="stylesheet" href="/stile.css?version=3" />
+	<link rel="stylesheet" href="/css/stileForm.css" />
 </head>
 
 <body>
-	<div><a href="/"><img src="/logo.png" width="10%" /></a></div>
-	<h1>Aggiungi un autore</h1>
-	<form th:action="@{/admin/creaAuthor}" method="POST" th:object="${author}" enctype="multipart/form-data">
-		<div th:if="${#fields.hasGlobalErrors()}" class="error-message">
-			<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
+				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
+
+			<div class="title-section">
+				<h1 class="page-title">Nuovo Libro</h1>
+			</div>
+
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div class="user-info">
+						<span th:text="${userDetails.username}" class="username">Username</span>
+						<a href="/logout" class="logout-link">Logout</a>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/login" class="login-link">Login</a>
+				</div>
+			</div>
 		</div>
-		<div>
-			Nome: <span><input type="text" th:field="${author.name}" /></span>
-			<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+	</header>
+
+	<main class="main-content">
+		<div class="container">
+			<div class="form-container">
+				<div class="form-header">
+					<h2 class="form-title">Inserisci i dati del nuovo autore</h2>
+				</div>
+				<form th:action="@{/admin/creaAuthor}" method="POST" th:object="${author}" enctype="multipart/form-data"
+					class="form">
+
+					<!-- Messaggi di errore globali -->
+					<div th:if="${#fields.hasGlobalErrors()}" class="error-message global-error">
+						<div class="error-icon">⚠️</div>
+						<div class="error-content">
+							<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+						</div>
+					</div>
+
+					<!-- Sezione Dati Personali -->
+					<div class="form-group">
+						<h3 class="section-title">Dati personali</h3>
+
+						<!-- Campo Nome -->
+						<div class="form-group">
+							<label for="name" class="form-label">Nome</label>
+							<input type="text" th:field="${author.name}" id="name" class="form-input"
+								placeholder="Inserisci il nome dell'autore" />
+							<div th:if="${#fields.hasErrors('name')}" class="error-message field-error">
+								<span th:errors="*{name}"></span>
+							</div>
+						</div>
+
+						<!-- Campo Cognome -->
+						<div class="form-group">
+							<label for="surname" class="form-label">Cognome</label>
+							<input type="text" th:field="${author.surname}" id="surname" class="form-input"
+								placeholder="Inserisci il cognome dell'autore" />
+							<div th:if="${#fields.hasErrors('surname')}" class="error-message field-error">
+								<span th:errors="*{surname}"></span>
+							</div>
+						</div>
+
+						<!-- Campo Nazionalità -->
+						<div class="form-group">
+							<label for="nationality" class="form-label">Nazionalità</label>
+							<input type="text" th:field="${author.nationality}" id="nationality" class="form-input"
+								placeholder="Es. Italiana, Francese, Americana..." />
+							<div th:if="${#fields.hasErrors('nationality')}" class="error-message field-error">
+								<span th:errors="*{nationality}"></span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Sezione Date Biografiche -->
+					<div class="form-group">
+						<h3 class="section-title">Date biografiche</h3>
+
+						<!-- Campo Data di Nascita -->
+						<div class="form-group">
+							<label for="dateOfBirth" class="form-label">Data di nascita</label>
+							<input type="date" th:field="${author.dateOfBirth}" id="dateOfBirth" class="form-input" />
+							<div th:if="${#fields.hasErrors('dateOfBirth')}" class="error-message field-error">
+								<span th:errors="*{dateOfBirth}"></span>
+							</div>
+						</div>
+
+						<!-- Campo Data di Morte -->
+						<div class="form-group">
+							<label for="dateOfDeath" class="form-label">Data della morte <span
+									class="optional-field">(se presente)</span></label>
+							<input type="date" th:field="${author.dateOfDeath}" id="dateOfDeath" class="form-input" />
+							<div class="field-note">
+								<small>Lascia vuoto se l'autore è ancora in vita</small>
+							</div>
+							<div th:if="${#fields.hasErrors('dateOfDeath')}" class="error-message field-error">
+								<span th:errors="*{dateOfDeath}"></span>
+							</div>
+						</div>
+					</div>
+
+					<!-- Upload Foto -->
+					<div class="form-group">
+						<h3 class="section-title">Foto dell'autore</h3>
+						<div class="file-upload-container">
+							<div class="file-upload-info">
+								<div class="upload-icon">👤</div>
+								<div class="upload-text">
+									<span class="upload-title">Seleziona la foto dell'autore</span>
+									<span class="upload-subtitle">Formati supportati: JPG, PNG, GIF</span>
+								</div>
+							</div>
+							<input type="file" id="image" name="image" accept="image/*" class="file-input-styled">
+						</div>
+					</div>
+
+					<!-- Pulsante Submit -->
+					<div class="form-actions">
+						<button type="submit" class="submit-button">
+							<span class="button-icon">👤</span>
+							Conferma e aggiungi autore
+						</button>
+						<a href="/" class="cancel-button">Annulla</a>
+					</div>
+				</form>
+			</div>
 		</div>
-		<div>
-			Cognome: <span><input type="text" th:field="${author.surname}" /></span>
-			<span th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></span>
-		</div>
-		<div>
-			Data di nascita: <span><input type="date" th:field="${author.dateOfBirth}" /></span>
-			<span th:if="${#fields.hasErrors('dateOfBirth')}" th:errors="*{dateOfBirth}"></span>
-		</div>
-		<div>
-			Data dela Morte (se presente): <span><input type="date" th:field="${author.dateOfDeath}" /></span>
-			<span th:if="${#fields.hasErrors('dateOfDeath')}" th:errors="*{dateOfDeath}"></span>
-		</div>
-		<div>
-			Nazionalità: <span><input type="text" th:field="${author.nationality}" /></span>
-			<span th:if="${#fields.hasErrors('nationality')}" th:errors="*{nationality}"></span>
-		</div>
-		<h3>Foto dell'Autore:</h3>
-		<div>
-			<label for="image">Carica immagine:</label>
-			<input id="image" type="file" name="image" accept="image/*" />
-		</div>
-		<div>
-			<span><button type="submit">Conferma</button></span>
-		</div>
-	</form>
+	</main>
 </body>
 
 </html>

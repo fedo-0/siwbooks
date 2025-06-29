@@ -91,7 +91,7 @@ h4 {
 
 .logout-link {
 	text-decoration: none;
-	color: orange;
+	color: #ffa500;
 	font-weight: 500;
 	font-size: 0.9rem;
 	transition: all 0.3s ease;

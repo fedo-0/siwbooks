@@ -2,52 +2,106 @@
 <html lang="it">
 
 <head>
-    <title>Modifica recensione</title>
-    <link rel="stylesheet" href="/stile.css?version=2" />
+	<title>Modifica recensione</title>
+	<link rel="stylesheet" href="/css/stileForm.css" />
 </head>
 
-<header>
-    <div><a href="/"><img src="/logo.png" width="10%" /></a></div>
-    <div th:if="${userDetails}">
-        <span th:text="${userDetails.username}">Username</span>
-        <a href="/logout">Logout</a>
-    </div>
-    <div th:unless="${userDetails}">
-        <a href="/login">Login</a>
-    </div>
-</header>
-
 <body>
-    <h1>Modifica la tua recensione per: <span th:text="${book.title}">Titolo libro</span></h1>
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
+				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
 
-    <form th:action="@{'/user/modificaReview/' + ${book.id}}" th:object="${review}" method="post">
-        <!-- Se serve inviare anche l'id della recensione -->
-        <!--<input type="hidden" th:field="*{id}" />-->
+			<div class="title-section">
+				<h1 class="page-title">Home</h1>
+			</div>
 
-        <div>
-            <label for="title">Titolo:</label>
-            <input type="text" id="title" th:field="*{title}" />
-            <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Errore titolo</span>
-        </div>
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div class="user-info">
+						<span th:text="${userDetails.username}" class="username">Username</span>
+						<a href="/profiloUser" class="profile-link">Il mio profilo</a>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/login" class="login-link">Login</a>
+				</div>
+			</div>
+		</div>
+	</header>
 
-        <div>
-            <label for="text">Testo:</label>
-            <textarea id="text" th:field="*{text}" rows="5" cols="40"></textarea>
-            <span th:if="${#fields.hasErrors('text')}" th:errors="*{text}">Errore testo</span>
-        </div>
+	<main class="main-content">
+		<div class="container">
+			<div class="form-container">
+				<div class="form-header">
+					<h1 class="form-title">Modifica la tua recensione per: <span class="book-title"
+							th:text="${book.title}">Titolo libro</span></h1>
+				</div>
 
-        <div>
-            <label for="rating">Valutazione (1–10):</label>
-            <input type="number" id="rating" th:field="*{rating}" min="1" max="10" step="0.5" />
-            <span th:if="${#fields.hasErrors('rating')}" th:errors="*{rating}">Errore valutazione</span>
-        </div>
+				<form th:action="@{'/user/modificaReview/' + ${book.id}}" th:object="${review}" method="post"
+					class="form">
+					<!-- Se serve inviare anche l'id della recensione -->
+					<!-- <input type="hidden" th:field="*{id}" /> -->
 
-        <div th:if="${#fields.hasGlobalErrors()}">
-            <p class="error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore globale</p>
-        </div>
+					<!-- Messaggi di errore globali -->
+					<div th:if="${#fields.hasGlobalErrors()}" class="error-message global-error">
+						<div class="error-icon">⚠️</div>
+						<div class="error-content">
+							<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">Errore globale</p>
+						</div>
+					</div>
 
-        <button type="submit">Aggiorna recensione</button>
-    </form>
+					<!-- Campo Titolo -->
+					<div class="form-group">
+						<label for="title" class="form-label">Titolo della recensione</label>
+						<input type="text" id="title" th:field="*{title}" class="form-input"
+							placeholder="Modifica il titolo della tua recensione" />
+						<div th:if="${#fields.hasErrors('title')}" class="error-message field-error">
+							<span th:errors="*{title}">Errore titolo</span>
+						</div>
+					</div>
+
+					<!-- Campo Testo -->
+					<div class="form-group">
+						<label for="text" class="form-label">Testo della recensione</label>
+						<textarea id="text" th:field="*{text}" class="form-textarea"
+							placeholder="Modifica il testo della tua recensione..."></textarea>
+						<div th:if="${#fields.hasErrors('text')}" class="error-message field-error">
+							<span th:errors="*{text}">Errore testo</span>
+						</div>
+					</div>
+
+					<!-- Campo Valutazione -->
+					<div class="form-group">
+						<label for="rating" class="form-label">Valutazione</label>
+						<div class="rating-container">
+							<input type="number" id="rating" th:field="*{rating}" class="form-input" min="1" max="10"
+								step="0.5" placeholder="Modifica la valutazione da 1 a 10" />
+							<div class="field-note">
+								<small>Modifica la valutazione da 1 a 10 (sono ammessi decimali, es: 7.5)</small>
+							</div>
+						</div>
+						<div th:if="${#fields.hasErrors('rating')}" class="error-message field-error">
+							<span th:errors="*{rating}">Errore valutazione</span>
+						</div>
+					</div>
+
+					<!-- Pulsanti Submit e Annulla -->
+					<div class="form-actions">
+						<button type="submit" class="submit-button">
+							<span class="button-icon">✏️</span>
+							Aggiorna recensione
+						</button>
+						<a th:href="@{/book/{id}(id=${book.id})}" class="cancel-button">Annulla</a>
+					</div>
+				</form>
+			</div>
+		</div>
+	</main>
 </body>
 
 </html>

@@ -114,7 +114,8 @@ public class AuthenticationController {
 	}
 	
 	@GetMapping("/accessoNegato")
-	public String accessoNegato() {
+	public String accessoNegato(Model model) {
+		model.addAttribute("isAdmin", this.userService.checkPermessiAdmin());
 	    return "accessoNegato.html";
 	}
 

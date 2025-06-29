@@ -26,7 +26,7 @@
 				<div th:if="${userDetails}">
 					<div class="user-info">
 						<span th:text="${userDetails.username}" class="username">Username</span>
-						<a th:href="@{/profiloUser/{id}(id=${userId})}" class="profile-link">Il mio profilo</a>
+						<a href="/profiloUser" class="profile-link">Il mio profilo</a>
 					</div>
 				</div>
 				<div th:unless="${userDetails}">
@@ -125,12 +125,6 @@
 			</section>
 		</div>
 	</main>
-
-	<footer class="footer">
-		<div class="container">
-			<p>&copy; 2024 SIW Books. Tutti i diritti riservati.</p>
-		</div>
-	</footer>
 </body>
 
 </html>

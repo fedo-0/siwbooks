@@ -2,59 +2,118 @@
 <html lang="it">
 
 <head>
-    <meta charset="UTF-8">
-    <title>Registrazione Completata</title>
+	<meta charset="UTF-8">
+	<title>Registrazione Completata</title>
+	<link rel="stylesheet" href="css/stileLoginRegister.css">
 </head>
 
 <body>
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
+				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
 
-    <div>
-        <a href="/">Home</a>
-    </div>
+			<div class="title-section">
+				<h1 class="page-title">Home</h1>
+			</div>
 
-    <div th:if="${userDetails}">
-        <span th:text="${userDetails.username}">Username</span>
-        <a href="/logout">Logout</a>
-    </div>
-    <div th:unless="${userDetails}">
-        <a href="/login">Login</a>
-    </div>
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div class="user-info">
+						<span th:text="${userDetails.username}" class="username">Username</span>
+						<a href="/profiloUser" class="profile-link">Il mio profilo</a>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/" class="logout-link">Vai alla Home</a>
+				</div>
+			</div>
+		</div>
+	</header>
 
-    <h1>Registrazione completata</h1>
-    <p>La tua registrazione è stata completata con successo</p>
+	<main class="login-form-main-content">
+		<div class="login-form-container" style="max-width: 700px;">
+			<section class="login-form-section">
+				<!-- Header con animazione e icona -->
+				<div class="login-form-header">
+					<div class="success-icon-container">
+						<span class="success-icon">✅</span>
+						<div class="success-ripple"></div>
+					</div>
+					<h1 class="login-form-title success-title">Benvenuto nella nostra comunità letteraria!</h1>
+					<p class="success-subtitle">La tua registrazione è stata completata con successo</p>
+				</div>
 
-    <h2>I tuoi dati registrati</h2>
+				<!-- Dati utente -->
+				<div class="user-data-section">
+					<h2 class="section-title">
+						<span class="section-icon">👤</span>
+						I tuoi dati registrati
+					</h2>
+					<div class="user-data-grid">
+						<div class="user-data-item">
+							<label class="user-data-label">Nome:</label>
+							<span class="user-data-value" th:text="${user.name}">Nome Utente</span>
+						</div>
+						<div class="user-data-item">
+							<label class="user-data-label">Cognome:</label>
+							<span class="user-data-value" th:text="${user.surname}">Cognome Utente</span>
+						</div>
+						<div class="user-data-item">
+							<label class="user-data-label">Email:</label>
+							<span class="user-data-value" th:text="${user.email}">email@esempio.com</span>
+						</div>
+					</div>
+				</div>
 
-    <div>
-        <div>
-            <label>Nome:</label>
-            <span th:text="${user.name}">Nome Utente</span>
-        </div>
+				<!-- Cosa può fare l'utente -->
+				<div class="features-section">
+					<h3 class="section-title">
+						<span class="section-icon">📚</span>
+						Inizia la tua avventura letteraria
+					</h3>
+					<div class="features-grid">
+						<div class="feature-card">
+							<div class="feature-icon">🔍</div>
+							<h4 class="feature-title">Esplora la libreria</h4>
+							<p class="feature-description">Scopri migliaia di libri organizzati per genere, autore e
+								valutazione</p>
+						</div>
+						<div class="feature-card">
+							<div class="feature-icon">✍️</div>
+							<h4 class="feature-title">Scrivi recensioni</h4>
+							<p class="feature-description">Condividi le tue opinioni e aiuta altri lettori a scegliere
+								il prossimo libro</p>
+						</div>
+						<div class="feature-card">
+							<div class="feature-icon">⭐</div>
+							<h4 class="feature-title">Valuta i libri</h4>
+							<p class="feature-description">Assegna stelle ai tuoi libri preferiti e tieni traccia delle
+								tue letture</p>
+						</div>
+						<div class="feature-card">
+							<div class="feature-icon">🎯</div>
+							<h4 class="feature-title">Ricevi suggerimenti</h4>
+							<p class="feature-description">Ottieni raccomandazioni personalizzate basate sui tuoi gusti
+								letterari</p>
+						</div>
+					</div>
+				</div>
 
-        <div>
-            <label>Cognome:</label>
-            <span th:text="${user.surname}">Cognome Utente</span>
-        </div>
-
-        <div>
-            <label>Email:</label>
-            <span th:text="${user.email}">email@esempio.com</span>
-        </div>
-    </div>
-
-    <div>
-        <h3>Cosa puoi fare ora:</h3>
-        <ul>
-            <li>Esplorare i libri</li>
-            <li>Scrivere recensioni sui tuoi libri preferiti</li>
-            <li>Valutare e condividere le tue esperienze letterarie</li>
-            <li>Scoprire nuovi libri e stili da leggere</li>
-        </ul>
-    </div>
-
-    <div>
-        <a href="/login">Accedi al tuo account</a>
-    </div>
+				<!-- Pulsante di accesso -->
+				<div class="login-cta-section">
+					<a href="/login" class="login-form-submit-button enhanced-button">
+						🚀 Inizia subito la tua esperienza
+					</a>
+					<p class="login-helper-text">Accedi al tuo account e inizia a esplorare il mondo dei libri</p>
+				</div>
+			</section>
+		</div>
+	</main>
 
 </body>
 

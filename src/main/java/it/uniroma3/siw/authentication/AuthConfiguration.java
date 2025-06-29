@@ -53,7 +53,7 @@ public class AuthConfiguration {
 				// ai css e alle immagini
 				.requestMatchers(HttpMethod.GET, "/profiloUser/**",
 						"/index", "/book/**", "/books", "/booksByYear/**", "/formSearchBook",
-						"/author/**", "/authors",
+						"/author/**", "/authors", "/accessoNegato",
 						"/register", "/css/**", "/images/**",
 						"/logo.png", "favicon.ico")
 				.permitAll()

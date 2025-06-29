@@ -3,20 +3,88 @@
 
 <head>
 	<title>Login</title>
+	<link rel="stylesheet" href="css/stileLoginRegister.css">
 </head>
 
 <body>
-	<div>
-		<a href="/">Home</a>
-	</div>
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
+				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
 
-	<div th:if="${userDetails}">
+			<div class="title-section">
+				<h1 class="page-title">Home</h1>
+			</div>
+
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div class="user-info">
+						<span th:text="${userDetails.username}" class="username">Username</span>
+						<a href="/profiloUser" class="profile-link">Il mio profilo</a>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/" class="logout-link">Vai alla Home</a>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<main class="login-form-main-content">
+		<div class="login-form-container">
+			<section class="login-form-section">
+				<div class="login-form-header">
+					<span class="login-form-icon">🔐</span>
+					<h1 class="login-form-title">Accedi al tuo account</h1>
+				</div>
+
+				<form th:action="@{/login}" method="POST" class="login-form-body">
+					<div class="login-form-field-group">
+						<label for="username" class="login-form-label">Username</label>
+						<input name="username" type="text" required placeholder="Inserisci il tuo username"
+							class="login-form-input" id="username" />
+					</div>
+
+					<div class="login-form-field-group">
+						<label for="password" class="login-form-label">Password</label>
+						<div class="login-form-password-group">
+							<input name="password" type="password" required placeholder="Inserisci la tua password"
+								id="password" class="login-form-input login-form-password-input" />
+							<button type="button" onclick="togglePassword('password')" class="login-form-toggle-button">
+								Mostra
+							</button>
+						</div>
+					</div>
+
+					<div th:if="${param.error != null}" class="login-form-error-message">
+						<p>Username o password errati</p>
+					</div>
+
+					<button type="submit" class="login-form-submit-button">
+						🔓 Accedi
+					</button>
+				</form>
+
+				<div class="login-form-register-section">
+					<p class="login-form-register-text">Non hai un account?</p>
+					<a th:href="@{/register}" class="login-form-register-link">Registrati qui</a>
+				</div>
+			</section>
+		</div>
+	</main>
+
+	<!--<div th:if="${userDetails}">
 		<span th:text="${userDetails.username}">Username</span>
 		<a href="/logout">Logout</a>
 	</div>
 	<div th:unless="${userDetails}">
 		<a href="/register">Registrati</a>
 	</div>
+
 	<h1>Accedi al tuo account</h1>
 	<form th:action="@{/login}" method="POST">
 		<div>
@@ -25,7 +93,7 @@
 		</div>
 		<div>
 			<label for="password">Password</label>
-			<input name="password" type="password" required placeholder="Inserisci la tua password" id="password"/>
+			<input name="password" type="password" required placeholder="Inserisci la tua password" id="password" />
 			<button type="button" onclick="togglePassword('password')" style="right: 2;">
 				Mostra
 			</button>
@@ -40,20 +108,20 @@
 			<span>Non hai un account?</span>
 			<a th:href="@{/register}">Registrati qui</a>
 		</div>
-	</form>
+	</form>-->
 
 	<script>
-	    function togglePassword(id) {
-	        const input = document.getElementById(id);
-	        const button = input.nextElementSibling;
-	        if (input.type === "password") {
-	            input.type = "text";
-	            button.textContent = "Nascondi";
-	        } else {
-	            input.type = "password";
-	            button.textContent = "Mostra";
-	        }
-	    }
+		function togglePassword(id) {
+			const input = document.getElementById(id);
+			const button = input.nextElementSibling;
+			if (input.type === "password") {
+				input.type = "text";
+				button.textContent = "Nascondi";
+			} else {
+				input.type = "password";
+				button.textContent = "Mostra";
+			}
+		}
 	</script>
 
 </body>

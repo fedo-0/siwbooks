@@ -3,34 +3,61 @@
 
 <head>
 	<title>Libri</title>
-	<link rel="stylesheet" href="/stile.css?version=2" />
+	<link rel="stylesheet" href="/css/stileForm.css" />
 </head>
 
-<header>
-	<div><a href="/"><img src="/logo.png" width="10%" /></a></div>
-	<div th:if="${userDetails}">
-		<span th:text="${userDetails.username}">Username</span>
-		<a href="/logout">Logout</a>
-	</div>
-	<div th:unless="${userDetails}">
-		<a href="/login">Login</a>
-	</div>
-	<a href="login"></a>
-</header>
-
 <body>
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
+				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
 
+			<div class="title-section">
+				<h1 class="page-title">Cerca</h1>
+			</div>
 
-	<form th:action="@{/cercaBooks}" method="post">
-		<label for="title">Titolo:</label>
-		<input type="text" id="title" name="title" />
-
-		<label for="year">Anno:</label>
-		<input type="number" id="year" name="year" />
-
-		<button type="submit">Cerca</button>
-	</form>
-
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div class="user-info">
+						<span th:text="${userDetails.username}" class="username">Username</span>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/login" class="login-link">Login</a>
+				</div>
+			</div>
+		</div>
+	</header>
+	<main class="search-form-main-content">
+		<div class="search-form-container">
+			<section class="search-form-section">
+				<div class="search-form-header">
+					<span class="search-form-icon">🔍</span>
+					<h1 class="search-form-title">Cerca Libri</h1>
+					<p class="search-form-subtitle">Trova i tuoi libri preferiti</p>
+				</div>
+				<form th:action="@{/cercaBooks}" method="post" class="search-form-body">
+					<div class="search-form-field-group">
+						<label for="title" class="search-form-label">Titolo:</label>
+						<input type="text" id="title" name="title" class="search-form-input"
+							placeholder="Inserisci il titolo del libro..." />
+					</div>
+					<div class="search-form-field-group">
+						<label for="year" class="search-form-label">Anno:</label>
+						<input type="number" id="year" name="year" class="search-form-input"
+							placeholder="Inserisci l'anno di pubblicazione..." />
+					</div>
+					<button type="submit" class="search-form-submit-button">
+						🔍 Cerca
+					</button>
+				</form>
+			</section>
+		</div>
+	</main>
 
 </body>
 

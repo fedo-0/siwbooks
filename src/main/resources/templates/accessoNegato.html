@@ -1,14 +1,56 @@
 <!DOCTYPE html>
 <html lang="it">
+
 <head>
-    <meta charset="UTF-8">
-    <title>Accesso Negato</title>
-    <link rel="stylesheet" href="/css/stile.css">
+	<meta charset="UTF-8">
+	<title>Accesso Negato</title>
+	<link rel="stylesheet" href="/css/stileIndex.css">
 </head>
+
 <body>
-    <div><a href="/"><img src="/logo.png" width="10%"></a></div>
-    <h1>Accesso Negato</h1>
-    <p>Non hai i permessi necessari per accedere a questa pagina.</p>
-    <a href="/">Torna alla home</a>
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
+				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
+
+			<div class="title-section">
+				<h1 class="page-title">Cerca</h1>
+			</div>
+
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div class="user-info">
+						<span th:text="${userDetails.username}" class="username">Username</span>
+						<div th:if="${isAdmin}">
+							<a href="/logout" class="logout-link">Logout</a>
+						</div>
+						<div th:if="${!isAdmin}">
+							<a href="/profiloUser" class="profile-link">Il mio profilo</a>
+						</div>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/login" class="login-link">Login</a>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<main class="access-denied-main-content">
+		<div class="access-denied-container">
+			<section class="access-denied-section">
+				<span class="access-denied-icon">🚫</span>
+				<h1 class="access-denied-title">Accesso Negato</h1>
+				<p class="access-denied-description">Non hai i permessi necessari per accedere a questa pagina.</p>
+				<a href="/" class="access-denied-home-button">🏠 Torna alla home</a>
+			</section>
+		</div>
+	</main>
+
 </body>
+
 </html>

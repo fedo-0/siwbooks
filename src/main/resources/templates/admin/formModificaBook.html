@@ -3,73 +3,147 @@
 
 <head>
 	<title>Modifica Libro</title>
-	<link rel="stylesheet" href="/stile.css?version=3" />
+	<link rel="stylesheet" href="/css/stileForm.css" />
 </head>
 
 <body>
-	<div><a href="/"><img src="/logo.png" width="10%" /></a></div>
-	<h1>Modifica Libro</h1>
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
+				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
 
-	<form th:action="@{'/admin/modificaBook/' + ${book.id}}" method="POST" th:object="${book}" enctype="multipart/form-data">
+			<div class="title-section">
+				<h1 class="page-title">Nuovo Libro</h1>
+			</div>
 
-		<div th:if="${#fields.hasGlobalErrors()}" class="error-message">
-			<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div class="user-info">
+						<span th:text="${userDetails.username}" class="username">Username</span>
+						<a href="/logout" class="logout-link">Logout</a>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/login" class="login-link">Login</a>
+				</div>
+			</div>
 		</div>
+	</header>
 
-		<div>
-			Titolo:
-			<input type="text" th:field="*{title}" />
-			<span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+	<main class="main-content">
+		<div class="container">
+			<div class="form-container">
+				<div class="form-header">
+					<h2 class="form-title">Modifica i dati del libro</h2>
+				</div>
+				<form th:action="@{'/admin/modificaBook/' + ${book.id}}" method="POST" th:object="${book}"
+					enctype="multipart/form-data" class="form">
+
+					<!-- Messaggi di errore globali -->
+					<div th:if="${#fields.hasGlobalErrors()}" class="error-message global-error">
+						<div class="error-icon">⚠️</div>
+						<div class="error-content">
+							<p th:each="err : ${#fields.globalErrors()}" th:text="${err}">...</p>
+						</div>
+					</div>
+
+					<!-- Campo Titolo -->
+					<div class="form-group">
+						<label for="title" class="form-label">Titolo del libro</label>
+						<input type="text" th:field="*{title}" id="title" class="form-input"
+							placeholder="Inserisci il titolo del libro" />
+						<div th:if="${#fields.hasErrors('title')}" class="error-message field-error">
+							<span th:errors="*{title}"></span>
+						</div>
+					</div>
+
+					<!-- Campo Anno -->
+					<div class="form-group">
+						<label for="year" class="form-label">Anno di pubblicazione</label>
+						<input type="number" th:field="*{year}" id="year" class="form-input" step="1" min="0"
+							placeholder="Es. 2024" />
+						<div th:if="${#fields.hasErrors('year')}" class="error-message field-error">
+							<span th:errors="*{year}"></span>
+						</div>
+					</div>
+
+					<!-- Selezione Autori -->
+					<div class="form-group authors-section">
+						<h3 class="section-title">Seleziona gli autori del libro</h3>
+						<div class="authors-container">
+							<h4 class="subsection-title">Autori disponibili nel sistema:</h4>
+							<div th:if="${allAuthors.isEmpty()}" class="empty-state">
+								<div class="empty-icon">👥</div>
+								<p>Non ci sono autori nel sistema</p>
+							</div>
+							<div th:if="${!allAuthors.isEmpty()}" class="authors-list">
+								<div th:each="a : ${allAuthors}" class="author-checkbox">
+									<label class="checkbox-label">
+										<input type="checkbox" name="authorIds" th:value="${a.id}"
+											th:checked="${book.authors.contains(a)}" class="checkbox-input" />
+										<span class="checkbox-custom"></span>
+										<span class="author-info"
+											th:text="${a.name + ' ' + a.surname + ' (' + a.nationality + ', ' + a.dateOfBirth + ')'}"></span>
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Immagini attuali -->
+					<div th:if="${book.imagePaths != null and !book.imagePaths.isEmpty()}" class="form-group">
+						<h3 class="section-title">Immagini attuali del libro</h3>
+						<div class="current-images-container">
+							<div class="current-images-grid">
+								<div th:each="img, iter : ${book.imagePaths}" class="current-image-item">
+									<div class="image-preview">
+										<img th:src="@{${img}}" alt="Immagine libro" class="preview-image" />
+									</div>
+									<div class="image-controls">
+										<label class="checkbox-label delete-checkbox">
+											<input type="checkbox" name="deleteImages" th:value="${img}"
+												class="checkbox-input" />
+											<span class="checkbox-custom"></span>
+											<span class="delete-text">Rimuovi questa immagine</span>
+										</label>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<!-- Upload Nuove Immagini -->
+					<div class="form-group">
+						<h3 class="section-title">Aggiungi nuove foto del libro</h3>
+						<div class="file-upload-container">
+							<div class="file-upload-info">
+								<div class="upload-icon">📸</div>
+								<div class="upload-text">
+									<span class="upload-title">Seleziona nuove immagini del libro</span>
+									<span class="upload-subtitle">Formati supportati: JPG, PNG, GIF</span>
+								</div>
+							</div>
+							<input type="file" id="images" name="images" multiple accept="image/*"
+								class="file-input-styled">
+						</div>
+					</div>
+
+					<!-- Pulsante Submit -->
+					<div class="form-actions">
+						<button type="submit" class="submit-button">
+							<span class="button-icon">💾</span>
+							Salva modifiche
+						</button>
+						<a href="/" class="cancel-button">Annulla</a>
+					</div>
+				</form>
+			</div>
 		</div>
-
-		<!-- Anno -->
-		<div>
-			Anno:
-			<input type="number" th:field="*{year}" step="1" min="0" />
-			<span th:if="${#fields.hasErrors('year')}" th:errors="*{year}"></span>
-		</div>
-
-		<!-- Autori -->
-		<div>
-			<h3>Seleziona gli autori del libro:</h3>
-			<div th:if="${allAuthors.isEmpty()}">Non ci sono autori nel sistema</div>
-			<ul th:if="${!allAuthors.isEmpty()}">
-				<li th:each="a : ${allAuthors}">
-					<label>
-						<input type="checkbox" name="authorIds"
-						       th:value="${a.id}" th:checked="${book.authors.contains(a)}" />
-						<span th:text="${a.name + ' ' + a.surname + ' (' + a.nationality + ', ' + a.dateOfBirth + ')'}"></span>
-					</label>
-				</li>
-			</ul>
-		</div>
-
-		<!-- Immagini già esistenti con checkbox per rimuoverle -->
-		<div th:if="${book.imagePaths != null and !book.imagePaths.isEmpty()}">
-			<h3>Immagini attuali:</h3>
-			<ul>
-				<li th:each="img, iter : ${book.imagePaths}">
-					<img th:src="@{${img}}" width="200px" alt="Immagine libro" />
-					<label>
-						<input type="checkbox" name="deleteImages" th:value="${img}" />
-						Rimuovi
-					</label>
-				</li>
-			</ul>
-		</div>
-
-		<!-- Caricamento nuove immagini -->
-		<div>
-			<h3>Carica nuove immagini:</h3>
-			<input id="images" type="file" name="images" multiple accept="image/*" />
-		</div>
-
-		<!-- Pulsante di conferma -->
-		<div>
-			<button type="submit">Salva modifiche</button>
-		</div>
-
-	</form>
+	</main>
 </body>
 
 </html>

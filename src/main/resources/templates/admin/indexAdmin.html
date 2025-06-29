@@ -34,7 +34,7 @@
 					<div th:if="${userDetails}">
 						<div class="user-info">
 							<span th:text="${userDetails.username}" class="username">Username</span>
-							<a th:href="@{/logout}" class="profile-link">Logout</a>
+							<a th:href="@{/logout}" class="logout-link">Logout</a>
 						</div>
 					</div>
 					<div th:unless="${userDetails}">

@@ -89,6 +89,14 @@ h4 {
 	font-size: 1rem;
 }
 
+.logout-link {
+	text-decoration: none;
+	color: orange;
+	font-weight: 500;
+	font-size: 0.9rem;
+	transition: all 0.3s ease;
+}
+
 .profile-link,
 .login-link {
 	text-decoration: none;
@@ -156,6 +164,246 @@ button.admin-link {
 	align-items: center;
 	gap: 20px;
 }
+
+
+/**PROFILO UTENTE**/
+/* Card profilo utente */
+.user-profile-card {
+	background-color: white;
+	border-radius: 15px;
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+	padding: 2rem;
+	margin-bottom: 3rem;
+	border: 1px solid #dcdcdc;
+}
+
+/* Header profilo con avatar placeholder */
+.profile-header {
+	display: flex;
+	align-items: center;
+	gap: 2rem;
+	margin-bottom: 2rem;
+	padding-bottom: 2rem;
+	border-bottom: 2px solid #f0f9ff;
+}
+
+.profile-avatar {
+	width: 100px;
+	height: 100px;
+	background-color: #f0f9ff;
+	border: 3px solid #00b3b3;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 3rem;
+	color: #00b3b3;
+	flex-shrink: 0;
+}
+
+.profile-info {
+	flex: 1;
+}
+
+.profile-username {
+	font-size: 2.2rem;
+	font-weight: 700;
+	color: #2f2f2f;
+	margin-bottom: 1rem;
+	line-height: 1.2;
+}
+
+/* Dettagli utente */
+.user-details {
+	display: grid;
+	gap: 1rem;
+}
+
+.detail-item {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+	padding: 0.5rem 0;
+}
+
+.detail-label {
+	font-weight: 600;
+	color: #555;
+	min-width: 120px;
+	font-size: 1rem;
+}
+
+.detail-value {
+	color: #2f2f2f;
+	font-size: 1rem;
+}
+
+/* Sezione recensioni */
+.reviews-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 2rem;
+}
+
+.reviews-count {
+	background-color: #f0f9ff;
+	border: 2px solid #00b3b3;
+	border-radius: 25px;
+	padding: 0.5rem 1.5rem;
+	font-weight: 600;
+	color: #2f2f2f;
+	font-size: 0.9rem;
+}
+
+/* No reviews message */
+.no-user-reviews {
+	background-color: #f8f9fa;
+	border-radius: 12px;
+	padding: 3rem 2rem;
+	text-align: center;
+	margin-bottom: 2rem;
+}
+
+.no-user-reviews p {
+	color: #888;
+	font-style: italic;
+	margin-bottom: 1.5rem;
+	font-size: 1.1rem;
+}
+
+.no-user-reviews .action-button {
+	display: inline-block;
+	background-color: #00b3b3;
+	color: white;
+	padding: 0.75rem 2rem;
+	border-radius: 25px;
+	text-decoration: none;
+	font-weight: 500;
+	transition: all 0.3s ease;
+}
+
+.no-user-reviews .action-button:hover {
+	background-color: #009999;
+	transform: scale(1.05);
+}
+
+/* Grid recensioni utente */
+.user-reviews-grid {
+	display: grid;
+	gap: 2rem;
+	margin-bottom: 3rem;
+}
+
+/* Card singola recensione utente */
+.user-review-item {
+	background-color: white;
+	border-radius: 12px;
+	padding: 2rem;
+	box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+	border: 1px solid #dcdcdc;
+	transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.user-review-item:hover {
+	transform: translateY(-2px);
+	box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+/* Header recensione */
+.user-review-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: flex-start;
+	margin-bottom: 1.5rem;
+	gap: 1rem;
+}
+
+.user-review-title {
+	font-size: 1.3rem;
+	font-weight: 600;
+	color: #2f2f2f;
+	margin: 0;
+	line-height: 1.3;
+	flex: 1;
+}
+
+.user-review-rating {
+	background-color: #00b3b3;
+	color: white;
+	padding: 0.4rem 1rem;
+	border-radius: 20px;
+	font-weight: 700;
+	font-size: 1rem;
+	white-space: nowrap;
+}
+
+/* Libro collegato */
+.review-book-link {
+	margin-bottom: 1.5rem;
+	padding: 1rem;
+	background-color: #f8f9fa;
+	border-radius: 8px;
+	border-left: 4px solid #00b3b3;
+}
+
+.review-book-link .detail-label {
+	margin-bottom: 0.5rem;
+}
+
+.review-book-link a {
+	color: #00b3b3;
+	text-decoration: none;
+	font-weight: 500;
+	font-size: 1.1rem;
+	transition: color 0.3s ease;
+}
+
+.review-book-link a:hover {
+	color: #009999;
+	text-decoration: underline;
+}
+
+/* Testo recensione */
+.user-review-text {
+	color: #555;
+	line-height: 1.6;
+	margin-bottom: 1.5rem;
+	font-size: 1rem;
+}
+
+/* Azioni recensione utente */
+.user-review-actions {
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+	flex-wrap: wrap;
+	padding-top: 1rem;
+	border-top: 1px solid #eee;
+}
+
+/* Link di navigazione */
+.navigation-links {
+	text-align: center;
+	margin-top: 2rem;
+}
+
+.back-home-link {
+	display: inline-block;
+	background-color: #2f2f2f;
+	color: white;
+	padding: 0.75rem 2rem;
+	border-radius: 25px;
+	text-decoration: none;
+	font-weight: 500;
+	transition: all 0.3s ease;
+}
+
+.back-home-link:hover {
+	background-color: #1a1a1a;
+	transform: scale(1.05);
+}
+
 
 
 
@@ -1187,6 +1435,48 @@ button.admin-link {
 		text-align: center;
 	}
 }
+
+
+/** RICERCA DEI LIBRI **/
+/* Titolo risultati ricerca */
+.search-results-title {
+	font-size: 2rem;
+	font-weight: 600;
+	color: #2f2f2f;
+	margin-bottom: 1.5rem;
+	text-align: center;
+	border-bottom: 3px solid #00b3b3;
+	padding-bottom: 0.5rem;
+}
+
+/* Paragrafo descrizione risultati */
+.search-results-description {
+	background-color: #f0f9ff;
+	border: 2px solid #00b3b3;
+	border-radius: 12px;
+	padding: 1.5rem 2rem;
+	margin-bottom: 2rem;
+	text-align: center;
+	font-size: 1.1rem;
+	line-height: 1.5;
+}
+
+.search-results-description strong {
+	color: #2f2f2f;
+	font-weight: 600;
+}
+
+/* Spans per i criteri di ricerca */
+.search-criteria-title {
+	color: #00b3b3;
+	font-weight: 700;
+}
+
+.search-criteria-year {
+	color: #00b3b3;
+	font-weight: 700;
+}
+
 
 /* Responsive Design */
 @media (max-width: 768px) {

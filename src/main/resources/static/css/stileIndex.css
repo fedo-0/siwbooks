@@ -65,6 +65,14 @@ h1, h2, h3, h4{
 	text-decoration: none;
 }
 
+.logout-link {
+	text-decoration: none;
+	color: orange;
+	font-weight: 500;
+	font-size: 0.9rem;
+	transition: all 0.3s ease;
+}
+
 .search-button {
 	margin-top: 2rem;
 	text-decoration: none;

@@ -25,7 +25,7 @@
 					<div class="user-info">
 						<span th:text="${userDetails.username}" class="username">Username</span>
 						<div th:if="${isAdmin}">
-							<a href="/logout" class="profile-link">Logout</a>
+							<a href="/logout" class="logout-link">Logout</a>
 						</div>
 						<div th:if="${!isAdmin}">
 							<a href="/profiloUser" class="profile-link">Il mio profilo</a>

@@ -208,12 +208,12 @@ public class BookController {
 			title = title.trim();
 			if (title.isEmpty()) title=null;
 		}
+		
 		Integer parsed = null;
 		if (year != null && !year.trim().isEmpty()) {
 			parsed = Integer.parseInt(year.trim());
 		}
-		System.out.println("\n\nTitle passato alla query: '" + title + "'");
-		System.out.println("Year passato alla query: " + parsed);
+		
 		model.addAttribute("isAdmin", this.userService.checkPermessiAdmin());
 		model.addAttribute("books", this.bookService.findByFilters(title, parsed));
 		model.addAttribute("year", parsed);

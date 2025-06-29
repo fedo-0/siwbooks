@@ -32,6 +32,7 @@ public class UserController {
 
 	@GetMapping("/profiloUser/{id}")
 	public String mostraProfiloUser(@PathVariable("id") Long userId, Model model) {
+		if (this.userService.checkPermessiAdmin()) return "redirect:/";
 		User user = this.userService.getUser(userId);
 		if (user == null) return "redirect:/";
 		
@@ -47,9 +48,8 @@ public class UserController {
 			}
 		}
 
-		boolean isOwnProfile = (actualUserId != null && actualUserId.equals(userId) && this.userService.checkPermessiAdmin());
+		boolean isOwnProfile = (actualUserId != null && actualUserId.equals(userId) && !this.userService.checkPermessiAdmin());
 
-		model.addAttribute("admin", this.userService.checkPermessiAdmin());
 		model.addAttribute("user", user);
 		model.addAttribute("isOwnProfile", isOwnProfile);
 		model.addAttribute("credentials", credentials);
@@ -60,6 +60,7 @@ public class UserController {
 	
 	@GetMapping("/profiloUser")
 	public String accediDirettamenteAProfilo(Model model) {
+		if (this.userService.checkPermessiAdmin()) return "redirect:/";
 	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 	    if (authentication == null || !authentication.isAuthenticated() ||
@@ -81,7 +82,6 @@ public class UserController {
 	    Long userId = credentials.getUser().getId();
 	    model.addAttribute("userId", userId);
 	    model.addAttribute("user", credentials.getUser());
-	    model.addAttribute("admin", this.userService.checkPermessiAdmin());
 		model.addAttribute("isOwnProfile", true);
 		model.addAttribute("credentials", credentials);
 

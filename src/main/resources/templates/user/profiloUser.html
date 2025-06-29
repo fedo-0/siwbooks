@@ -4,83 +4,132 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/css/stileEntita.css">
 	<title>Profilo utente</title>
 </head>
 
 <body>
-	<header>
-		<a href="/"><img src="/logo.png" alt="SiwBooks" width="10%" /></a>
-		<span>SiwBooks</span>
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
+				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
 
-		<div th:if="${userDetails}">
-			<span th:text="${userDetails.username}">Username</span>
-			<a href="/logout">Logout</a>
-		</div>
-		<div th:unless="${userDetails}">
-			<a href="/login">Login</a>
+			<div class="title-section">
+				<h1 class="page-title">Profilo</h1>
+			</div>
+
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div class="user-info">
+						<div th:if="${isOwnProfile}">
+							<a href="/logout" class="logout-link">Logout</a>
+						</div>
+						<div th:if="${!isOwnProfile}">
+							<a href="/profiloUser" class="profile-link">Il mio profilo</a>
+						</div>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/login" class="login-link">Login</a>
+				</div>
+			</div>
 		</div>
 	</header>
 
-	<main>
-		<!--<div th:unless="${admin}">-->
-		<div th:if="${user}">
-			<h1 th:text="'Profilo di ' + ${credentials.username}">Profilo Utente</h1>
-
-			<p><strong>Nome utente:</strong> <span th:text="${credentials.username}">Username</span></p>
-			<p th:if="${user.name}"><strong>Nome:</strong> <span th:text="${user.name}">Nome</span></p>
-			<p th:if="${user.surname}"><strong>Cognome:</strong> <span th:text="${user.surname}">Cognome</span></p>
-			<p th:if="${user.email}"><strong>Email:</strong> <span th:text="${user.email}">Email</span></p>
-
-			<!--<div th:if="${isOwnProfile}">
-                <p><strong>Azioni:</strong></p>
-                <a th:href="@{/profiloUser/{id}/modificaProfilo(id=${user.id})}">Modifica il tuo profilo</a>
-                <a th:href="@{/profiloUser/{id}/modificaPassword(id=${user.id})}">Modifica la tua password</a>
-            </div>-->
-			<div th:if="${isOwnProfile}">
-				<h2>Le Mie Recensioni</h2>
-			</div>
-			<div th:unless="${isOwnProfile}">
-				<h2>Le Recensioni dell'Utente</h2>
-			</div>
-			<div th:if="${user.reviews.isEmpty()}">
-				<p>Non ci sono recensioni per questo utente</p>
-				<a href="/books">Vai ai libri</a>
-			</div>
-
-			<div th:unless="${user.reviews.isEmpty()}">
-				<p th:text="'Recensioni totali: ' + ${user.reviews.size()}">Numero recensioni</p>
-
-				<div th:each="review : ${user.reviews}">
-					<h3 th:text="${review.title}">Titolo recensione</h3>
-					<p th:text="'Voto: ' + ${review.rating} + '/10'">Voto</p>
-					<p><strong>Libro:</strong>
-						<a th:href="@{/book/{id}(id=${review.book.id})}" th:text="${review.book.title}">Titolo
-							Libro</a>
-					</p>
-					<p th:text="${review.text}">Testo recensione</p>
-
-					<div th:if="${isOwnProfile}">
-						<form th:action="@{'/eliminaReview/' + ${review.id}}" method="POST">
-							<button type="submit">Elimina la tua recensione</button>
-						</form>
-						<a th:href="@{'/user/formModificaReview/' + ${review.book.id}}">
-							Modifica recensione
-						</a>
+	<main class="main-content">
+		<div class="container">
+			<!-- Card Profilo Utente -->
+			<div class="user-profile-card">
+				<div class="profile-header">
+					<div class="profile-avatar">
+						👤
 					</div>
-					<div th:if="${admin}">
-						<form th:action="@{'/eliminaReview/' + ${review.id}}" method="POST">
-							<button type="submit">Elimina la tua recensione</button>
-						</form>
+					<div class="profile-info">
+						<h1 class="profile-username" th:text="'Profilo di ' + ${credentials.username}">Profilo di
+							Username</h1>
+						<div class="user-details">
+							<div class="detail-item">
+								<span class="detail-label">Nome utente:</span>
+								<span class="detail-value" th:text="${credentials.username}">Username</span>
+							</div>
+							<div th:if="${user.name}" class="detail-item">
+								<span class="detail-label">Nome:</span>
+								<span class="detail-value" th:text="${user.name}">Nome</span>
+							</div>
+							<div th:if="${user.surname}" class="detail-item">
+								<span class="detail-label">Cognome:</span>
+								<span class="detail-value" th:text="${user.surname}">Cognome</span>
+							</div>
+							<div th:if="${user.email}" class="detail-item">
+								<span class="detail-label">Email:</span>
+								<span class="detail-value" th:text="${user.email}">Email</span>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>
 
-			<!--</div>-->
+			<!-- Sezione Recensioni -->
+			<div class="reviews-section">
+				<div class="reviews-header">
+					<div th:if="${isOwnProfile}">
+						<h2 class="section-title">Le Mie Recensioni</h2>
+					</div>
+					<div th:unless="${isOwnProfile}">
+						<h2 class="section-title">Le Recensioni dell'Utente</h2>
+					</div>
+					<div th:unless="${user.reviews.isEmpty()}" class="reviews-count">
+						<span th:text="'Recensioni totali: ' + ${user.reviews.size()}">Recensioni totali: 5</span>
+					</div>
+				</div>
 
-			<div th:unless="${user}">
-				<h2>Utente non trovato</h2>
-				<p>L'utente che stai cercando non esiste</p>
-				<a href="/">Torna alla homepage</a>
+				<!-- Messaggio nessuna recensione -->
+				<div th:if="${user.reviews.isEmpty()}" class="no-user-reviews">
+					<p>Non ci sono recensioni per questo utente</p>
+					<a href="/books" class="action-button">Vai ai libri</a>
+				</div>
+
+				<!-- Griglia recensioni -->
+				<div th:unless="${user.reviews.isEmpty()}" class="user-reviews-grid">
+					<div th:each="review : ${user.reviews}" class="user-review-item">
+						<div class="user-review-header">
+							<h3 class="user-review-title" th:text="${review.title}">Titolo recensione</h3>
+							<div class="user-review-rating" th:text="${review.rating} + '/10'">8/10</div>
+						</div>
+
+						<div class="review-book-link">
+							<div class="detail-label">Libro recensito:</div>
+							<a th:href="@{/book/{id}(id=${review.book.id})}" th:text="${review.book.title}">Titolo
+								Libro</a>
+						</div>
+
+						<div class="user-review-text" th:text="${review.text}">
+							Testo della recensione che può essere anche molto lungo e descrivere nel dettaglio le
+							impressioni dell'utente sul libro letto.
+						</div>
+
+						<div th:if="${isOwnProfile}" class="user-review-actions">
+							<a th:href="@{'/user/formModificaReview/' + ${review.book.id}}" class="review-button edit">
+								Modifica recensione
+							</a>
+							<form th:action="@{'/eliminaReview/' + ${review.id}}" method="POST" class="delete-form">
+								<button type="submit" class="review-button delete"
+									onclick="return confirm('Sei sicuro di voler eliminare questa recensione?');">
+									Elimina recensione
+								</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Link navigazione -->
+			<div class="navigation-links">
+				<a href="/" class="back-home-link">Torna alla homepage</a>
 			</div>
 		</div>
 	</main>

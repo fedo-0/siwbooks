@@ -46,6 +46,7 @@ public class AuthorController {
 	@GetMapping("/author/{id}")
 	public String mostraAutore(@PathVariable("id") Long id, Model model) {
 		if (this.authorService.getAuthorById(id)==null) return "redirect:/authors";
+		model.addAttribute("isAdmin", this.userService.checkPermessiAdmin());
 		model.addAttribute("author", this.authorService.getAuthorById(id));
 		return "author.html";
 	}

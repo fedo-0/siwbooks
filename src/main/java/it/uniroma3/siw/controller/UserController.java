@@ -57,25 +57,38 @@ public class UserController {
 		return "user/profiloUser.html";
 	}
 
-	/*
-	@GetMapping("/profiloUser/{id}/modificaProfilo")
-	public String modificaProfilo(@PathVariable("id") Long userId, Model model) {
-		Long currentUserId = null;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		if (!(authentication instanceof AnonymousAuthenticationToken)) {
-			currentUserId = this.userService.getCurrentUser().getId();
-		}
-		User user = this.userService.getUser(userId);
-		if (user == null) {
-			model.addAttribute("user", user);
-			return "profiloUser";
-		}
-		if (currentUserId == null || !(currentUserId.equals(user.getId())))
-			return "formLogin";
-		model.addAttribute("user", user);
-		return "modificaProfilo.html";
+	
+	@GetMapping("/profiloUser")
+	public String accediDirettamenteAProfilo(Model model) {
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+	    if (authentication == null || !authentication.isAuthenticated() ||
+	        authentication instanceof AnonymousAuthenticationToken) {
+	        return "redirect:/login"; // o pagina di errore
+	    }
+
+	    Object principal = authentication.getPrincipal();
+
+	    if (!(principal instanceof UserDetails userDetails)) {
+	        return "redirect:/login"; // fallback di sicurezza
+	    }
+
+	    Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
+	    if (credentials == null || credentials.getUser() == null) {
+	        return "redirect:/login"; // o errore
+	    }
+
+	    Long userId = credentials.getUser().getId();
+	    model.addAttribute("userId", userId);
+	    model.addAttribute("user", credentials.getUser());
+	    model.addAttribute("admin", this.userService.checkPermessiAdmin());
+		model.addAttribute("isOwnProfile", true);
+		model.addAttribute("credentials", credentials);
+
+	    return "user/profiloUser"; // corrisponde a user/profiloUser.html
 	}
 
+/*
 	@PostMapping("/salvaInformazioniUtente/{id}")
 	public String salvaInformazioniUtente(@PathVariable("id") Long id, @Valid @ModelAttribute User updated,
 			BindingResult bindingResult, Model model) {

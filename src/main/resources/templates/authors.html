@@ -4,50 +4,99 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Lista Autori</title>
-	<link rel="stylesheet" href="/stile.css">
+	<link rel="stylesheet" href="/css/stileEntita.css">
 </head>
 
-<header>
-    <div><a href="/"><img src="/logo.png" width="10%" /></a></div>
-    <div th:if="${userDetails}">
-        <span th:text="${userDetails.username}">Username</span>
-        <a href="/logout">Logout</a>
-    </div>
-    <div th:unless="${userDetails}">
-        <a href="/login">Login</a>
-    </div>
-</header>
 
 <body>
-	<h1>Lista degli Autori</h1>
-
-	<div th:if="${authors.isEmpty()}">
-		<p>Non ci sono autori nel sistema.</p>
-	</div>
-
-	<ul th:if="${!authors.isEmpty()}">
-		<li th:each="a : ${authors}">
-			<a th:href="@{'/author/' + ${a.id}}">
-				<span th:text="${a.name} + ' ' + ${a.surname}">Nome Cognome</span>
-			</a>
-			<span> - </span>
-			<span th:text="${a.nationality}">Nazionalità</span>
-			<span th:if="${isAdmin}">
-				<!-- Bottone Modifica -->
-				<a th:href="@{'admin/modificaAuthor/' + ${a.id}}">
-					<button>Modifica</button>
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
 				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
 
-				<!-- Bottone Elimina -->
-				<form th:action="@{'admin/eliminaAuthor/' + ${a.id}}" method="post" style="display:inline;">
-					<button type="submit"
-						onclick="return confirm('Sei sicuro di voler eliminare questo autore? ATTENZIONE: Questa azione è irreversibile');">
-						Elimina
-					</button>
-				</form>
-			</span>
-		</li>
-	</ul>
+			<div class="title-section">
+				<h1 class="page-title">Gli Autori</h1>
+			</div>
+
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div class="user-info">
+						<span th:text="${userDetails.username}" class="username">Username</span>
+						<div th:if="${isAdmin}">
+							<a href="/logout" class="profile-link">Logout</a>
+						</div>
+						<div th:if="${!isAdmin}">
+							<a href="/profiloUser" class="profile-link">Il mio profilo</a>
+						</div>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/login" class="login-link">Login</a>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<main class="main-content">
+		<div class="container">
+			<!-- Titolo della pagina -->
+			<h1 class="book-title">Lista degli Autori</h1>
+
+			<!-- Messaggio se non ci sono autori -->
+			<div th:if="${authors.isEmpty()}" class="no-reviews">
+				<h3 class="no-content-message">Non ci sono autori nel sistema.</h3>
+			</div>
+
+			<!-- Griglia degli autori -->
+			<div th:if="${!authors.isEmpty()}" class="authors-list-section">
+				<div class="authors-grid">
+					<div th:each="a : ${authors}" class="author-list-card">
+						<div class="author-list-content">
+							<!-- Immagine autore a sinistra -->
+							<div class="author-list-gallery">
+								<div th:if="${a.imagePath != null}" class="author-list-image-container">
+									<img th:src="@{${a.imagePath}}" alt="Foto Autore" class="author-list-image" />
+								</div>
+								<div th:if="${a.imagePath == null}" class="author-list-placeholder">
+									<span class="author-list-placeholder-icon">👤</span>
+								</div>
+							</div>
+
+							<!-- Informazioni autore a destra -->
+							<div class="author-list-details">
+								<h3 class="author-list-name">
+									<a th:href="@{'/author/' + ${a.id}}" th:text="${a.name} + ' ' + ${a.surname}"
+										class="author-link">Nome Cognome</a>
+								</h3>
+								<div class="author-list-nationality">
+									<span class="metadata-label">Nazionalità:</span>
+									<span th:text="${a.nationality}">Nazionalità</span>
+								</div>
+
+								<!-- Azioni admin -->
+								<div th:if="${isAdmin}" class="author-list-admin-actions">
+									<a th:href="@{'admin/modificaAuthor/' + ${a.id}}" class="review-button edit">
+										Modifica
+									</a>
+									<form th:action="@{'admin/eliminaAuthor/' + ${a.id}}" method="post"
+										class="delete-form">
+										<button type="submit" class="review-button delete admin"
+											onclick="return confirm('Sei sicuro di voler eliminare questo autore? ATTENZIONE: Questa azione è irreversibile');">
+											Elimina
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
 </body>
 
 </html>

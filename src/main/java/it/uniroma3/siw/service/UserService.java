@@ -51,5 +51,15 @@ public class UserService {
 		}
 		return isAdmin;
 	}
+	
+	public Long getId () {
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		if (authentication instanceof AnonymousAuthenticationToken) {
+			return null;
+		}
+		UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+		Credentials credentials = credentialsService.getCredentials(userDetails.getUsername());
+		return credentials.getId();
+	}
 
 }

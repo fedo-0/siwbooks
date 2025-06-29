@@ -4,42 +4,155 @@
 <head>
 	<meta charset="UTF-8">
 	<title th:text="${author.name} + ' ' + ${author.surname}">Autore</title>
-	<link rel="stylesheet" href="/stile.css">
+	<link rel="stylesheet" href="/css/stileEntita.css">
 </head>
 
-<header>
-    <div><a href="/"><img src="/logo.png" width="10%" /></a></div>
-    <div th:if="${userDetails}">
-        <span th:text="${userDetails.username}">Username</span>
-        <a href="/logout">Logout</a>
-    </div>
-    <div th:unless="${userDetails}">
-        <a href="/login">Login</a>
-    </div>
-</header>
-
 <body>
-	<h1 th:text="${author.name} + ' ' + ${author.surname}">Nome Cognome</h1>
+	<!--HEADER-->
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
+				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
 
-	<p><strong>Nazionalità:</strong> <span th:text="${author.nationality}">Italiana</span></p>
-	<p><strong>Data di nascita:</strong>
-		<span th:text="${#temporals.format(author.dateOfBirth, 'dd/MM/yyyy')}"></span>
-	<p th:if="${author.dateOfDeath != null}">
-	  <strong>Data della morte:</strong> 
-	  <span th:text="${#temporals.format(author.dateOfDeath, 'dd/MM/yyyy')}"></span>
-	</p>
-	<h2>Libri scritti</h2>
-	<ul th:if="${author.books != null and !author.books.isEmpty()}">
-		<li th:each="book : ${author.books}">
-			<a th:href="@{'/book/' + ${book.id}}" th:text="${book.title}">Titolo Libro</a>
-		</li>
-	</ul>
-	<p th:if="${author.books == null or author.books.isEmpty()}">Questo autore non ha ancora scritto libri.</p>
-	<div th:if="${author.imagePath != null}">
-	    <h3>Immagine:</h3>
-	    <img th:src="@{${author.imagePath}}" alt="Immagine Autore" width="200px" />
+			<div class="title-section">
+				<h1 class="page-title">Su questo libro</h1>
+			</div>
+
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div th:if="${isAdmin}">
+						<div class="user-admin-wrapper">
+							<!-- Sezione link admin -->
+							<div class="admin-actions">
+								<a th:href="@{'/admin/modificaAuthor/' + ${author.id}}" class="admin-link">Modifica</a>
+
+								<form th:action="@{'/admin/eliminaAuthor/' + ${author.id}}" method="post"
+									style="display:inline;">
+									<button type="submit"
+										onclick="return confirm('Sei sicuro di voler eliminare questo libro? ATTENZIONE: Questa azione è irreversibile');"
+										class="admin-link">Elimina</button>
+								</form>
+							</div>
+
+							<!-- Sezione utente -->
+							<div class="user-section">
+								<div th:if="${userDetails}">
+									<div class="user-info">
+										<span th:text="${userDetails.username}" class="username">Username</span>
+										<a th:href="@{/logout}" class="profile-link">Logout</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div th:if="!${isAdmin}">
+						<div class="user-info">
+							<span th:text="${userDetails.username}" class="username">Username</span>
+							<div th:if="${!isAdmin}">
+								<a href="/profiloUser" class="profile-link">Il mio profilo</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/login" class="login-link">Login</a>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<main class="main-content">
+	<div class="container">
+		<!-- Sezione principale dell'autore -->
+		<div class="book-detail-card">
+			<div class="book-content">
+				<!-- Foto autore a sinistra -->
+				<div class="book-gallery">
+					<div th:if="${author.imagePath != null}" class="image-carousel">
+						<div class="carousel-item">
+							<img th:src="@{${author.imagePath}}" alt="Immagine Autore" />
+						</div>
+					</div>
+					<div th:if="${author.imagePath == null}" class="no-image-placeholder">
+						<span class="placeholder-icon">👤</span>
+						<p>Nessuna immagine disponibile</p>
+					</div>
+				</div>
+
+				<!-- Informazioni autore a destra -->
+				<div class="book-details">
+					<h1 class="book-title" th:text="${author.name} + ' ' + ${author.surname}">Nome Cognome</h1>
+
+					<div class="book-metadata">
+						<div class="metadata-item">
+							<span class="metadata-label">Nazionalità:</span>
+							<span th:text="${author.nationality}">Italiana</span>
+						</div>
+
+						<div class="metadata-item">
+							<span class="metadata-label">Data di nascita:</span>
+							<span th:text="${#temporals.format(author.dateOfBirth, 'dd/MM/yyyy')}">01/01/1950</span>
+						</div>
+
+						<div th:if="${author.dateOfDeath != null}" class="metadata-item">
+							<span class="metadata-label">Data della morte:</span>
+							<span th:text="${#temporals.format(author.dateOfDeath, 'dd/MM/yyyy')}">31/12/2000</span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Sezione libri scritti -->
+		<div class="reviews-section">
+			<h2 class="section-title">Libri scritti</h2>
+			
+			<div th:if="${author.books != null and !author.books.isEmpty()}">
+				<div class="author-books-grid">
+					<div th:each="book : ${author.books}" class="author-book-card">
+						<div class="author-book-content">
+							<!-- Immagine libro a sinistra -->
+							<div class="author-book-gallery">
+								<div th:if="${book.imagePaths != null and !book.imagePaths.isEmpty()}" class="author-book-image-container">
+									<img th:src="@{${book.imagePaths[0]}}" alt="Copertina libro" class="author-book-image" />
+								</div>
+								<div th:if="${book.imagePaths == null or book.imagePaths.isEmpty()}" class="author-book-placeholder">
+									<span class="author-book-placeholder-icon">📖</span>
+								</div>
+							</div>
+
+							<!-- Informazioni libro a destra -->
+							<div class="author-book-details">
+								<h4 class="author-book-title">
+									<a th:href="@{'/book/' + ${book.id}}" 
+									   th:text="${book.title}" 
+									   class="author-link">Titolo Libro</a>
+								</h4>
+								<div th:if="${book.year != null}" class="author-book-year">
+									<span class="rating-label">Anno:</span>
+									<span class="rating-value" th:text="${book.year}">2020</span>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div th:if="${author.books == null or author.books.isEmpty()}" class="no-reviews">
+				<h3 class="no-content-message">Questo autore non ha ancora scritto libri.</h3>
+			</div>
+		</div>
+
+		<!-- Link di ritorno -->
+		<div class="back-link-section">
+			<a href="/authors" class="back-link">← Torna alla lista degli autori</a>
+		</div>
 	</div>
-	<p><a href="/authors">← Torna alla lista degli autori</a></p>
+</main>
 </body>
 
 </html>

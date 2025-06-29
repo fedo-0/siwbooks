@@ -54,7 +54,7 @@
 						<div class="user-info">
 							<span th:text="${userDetails.username}" class="username">Username</span>
 							<div th:if="${!isAdmin}">
-								<a th:href="@{/profiloUser/{id}(id=${userId})}" class="profile-link">Il mio profilo</a>
+								<a href="/profiloUser" class="profile-link">Il mio profilo</a>
 							</div>
 						</div>
 					</div>

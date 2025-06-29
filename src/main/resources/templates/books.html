@@ -3,52 +3,111 @@
 
 <head>
 	<title>Libri</title>
-	<link rel="stylesheet" href="/stile.css?version=2" />
+	<link rel="stylesheet" href="/css/stileEntita.css" />
 </head>
 
-<header>
-	<div><a href="/"><img src="/logo.png" width="10%" /></a></div>
-	<div th:if="${userDetails}">
-		<span th:text="${userDetails.username}">Username</span>
-		<a href="/logout">Logout</a>
-	</div>
-	<div th:unless="${userDetails}">
-		<a href="/login">Login</a>
-	</div>
-	<a href="login"></a>
-</header>
-
 <body>
-	<div th:if="${year}">
-		<h1 th:text="'Libri del ' + ${year}">Libri di un anno</h1>
-	</div>
-	<div th:unless="${year}">
-		<h1>Libri</h1>
-	</div>
-	<div th:if="${bookNumber!=null}" th:text="'Sono stati trovati '+ ${bookNumber} + ' libri'">Numero Libri</div>
-	<div th:if="${books.isEmpty()}">Non ci sono libri nel sistema</div>
-	<ul>
-		<li th:each="book : ${books}">
-			<span>
-				<a th:href="@{'/book' + '/' + ${book.id}}" th:text="${book.title} + ' (' + ${book.year} + ')'">Up!
-					(2000)</a>
-			</span>
-			<span th:if="${isAdmin}">
-				<!-- Bottone Modifica -->
-				<a th:href="@{'admin/modificaBook/' + ${book.id}}">
-					<button>Modifica</button>
+	<header class="header">
+		<div class="header-container">
+			<div class="logo-section">
+				<a href="/" class="logo-link">
+					<img src="/logo.png" alt="SIW Books Logo" class="logo">
 				</a>
+				<span class="site-name">Siwbooks</span>
+			</div>
 
-				<!-- Bottone Elimina -->
-				<form th:action="@{'admin/eliminaBook/' + ${book.id}}" method="post" style="display:inline;">
-					<button type="submit"
-						onclick="return confirm('Sei sicuro di voler eliminare questo libro? ATTENZIONE: Questa azione è irreversibile');">
-						Elimina
-					</button>
-				</form>
-			</span>
-		</li>
-	</ul>
+			<div class="title-section">
+				<h1 class="page-title">I Libri</h1>
+			</div>
+
+			<div class="user-section">
+				<div th:if="${userDetails}">
+					<div class="user-info">
+						<span th:text="${userDetails.username}" class="username">Username</span>
+						<div th:if="${isAdmin}">
+							<a href="/logout" class="profile-link">Logout</a>
+						</div>
+						<div th:if="${!isAdmin}">
+							<a href="/profiloUser" class="profile-link">Il mio profilo</a>
+						</div>
+					</div>
+				</div>
+				<div th:unless="${userDetails}">
+					<a href="/login" class="login-link">Login</a>
+				</div>
+			</div>
+		</div>
+	</header>
+
+	<main class="main-content">
+		<div class="container">
+			<!-- Titolo della pagina -->
+			<div th:if="${year}">
+				<h1 class="book-title" th:text="'Libri del ' + ${year}">Libri del 2024</h1>
+			</div>
+			<div th:unless="${year}">
+				<h1 class="book-title">Libri</h1>
+			</div>
+
+			<!-- Contatore libri -->
+			<div th:if="${bookNumber != null}" class="books-counter">
+				<span th:text="'Sono stati trovati ' + ${bookNumber} + ' libri'">Sono stati trovati 25 libri</span>
+			</div>
+
+			<!-- Messaggio se non ci sono libri -->
+			<div th:if="${books.isEmpty()}" class="no-reviews">
+				<h3 class="no-content-message">Non ci sono libri nel sistema.</h3>
+			</div>
+
+			<!-- Griglia dei libri -->
+			<div th:if="${!books.isEmpty()}" class="books-list-section">
+				<div class="books-grid">
+					<div th:each="book : ${books}" class="book-list-card">
+						<div class="book-list-content">
+							<!-- Immagine libro a sinistra -->
+							<div class="book-list-gallery">
+								<div th:if="${book.imagePaths != null and !book.imagePaths.isEmpty()}"
+									class="book-list-image-container">
+									<img th:src="@{${book.imagePaths[0]}}" alt="Copertina Libro"
+										class="book-list-image" />
+								</div>
+								<div th:if="${book.imagePaths == null or book.imagePaths.isEmpty()}"
+									class="book-list-placeholder">
+									<span class="book-list-placeholder-icon">📖</span>
+									<small>Nessuna immagine</small>
+								</div>
+							</div>
+
+							<!-- Informazioni libro a destra -->
+							<div class="book-list-details">
+								<h3 class="book-list-title">
+									<a th:href="@{'/book/' + ${book.id}}" th:text="${book.title}">Titolo del Libro</a>
+								</h3>
+								<div class="book-list-year">
+									<span class="metadata-label">Anno:</span>
+									<span th:text="${book.year}">2024</span>
+								</div>
+
+								<!-- Azioni admin -->
+								<div th:if="${isAdmin}" class="book-list-admin-actions">
+									<a th:href="@{'admin/modificaBook/' + ${book.id}}" class="review-button edit">
+										Modifica
+									</a>
+									<form th:action="@{'admin/eliminaBook/' + ${book.id}}" method="post"
+										class="delete-form">
+										<button type="submit" class="review-button delete admin"
+											onclick="return confirm('Sei sicuro di voler eliminare questo libro? ATTENZIONE: Questa azione è irreversibile');">
+											Elimina
+										</button>
+									</form>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
 </body>
 
 </html>

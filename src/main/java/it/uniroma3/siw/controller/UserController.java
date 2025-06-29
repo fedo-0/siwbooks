@@ -30,14 +30,11 @@ public class UserController {
 	@Autowired
 	CredentialsService credentialsService;
 
-	@Autowired
-	private PasswordEncoder passwordEncoder;
-
 	@GetMapping("/profiloUser/{id}")
 	public String mostraProfiloUser(@PathVariable("id") Long userId, Model model) {
 		User user = this.userService.getUser(userId);
 		if (user == null) return "redirect:/";
-
+		
 		Credentials credentials = this.credentialsService.getCredentials(userId);
 		
 		Long actualUserId = null;

@@ -62,28 +62,6 @@ body {
 	text-decoration: none;
 }
 
-.search-button {
-	margin-top: 2rem;
-	text-decoration: none;
-	background-color: #00b3b3;
-	/* verde acqua */
-	color: white;
-	padding: 0.75rem 1.5rem;
-	border-radius: 25px;
-	font-size: 1rem;
-	font-weight: 500;
-	transition: all 0.3s ease;
-	display: inline-flex;
-	align-items: center;
-	gap: 0.5rem;
-	white-space: nowrap;
-}
-
-.search-button:hover {
-	background-color: #009999;
-	transform: scale(1.05);
-}
-
 .user-section {
 	display: flex;
 	align-items: center;
@@ -117,6 +95,59 @@ body {
 	color: #009999;
 	text-decoration: underline;
 }
+
+/* ADMIN */
+.admin-section {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	flex-wrap: wrap;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.admin-link {
+	background-color: rgb(255, 241, 0);
+	color: black;
+	padding: 6px 12px;
+	border-radius: 20px;
+	text-decoration: none;
+	font-size: 0.85em;
+	transition: background-color 0.3s;
+	border: none;
+	cursor: pointer;
+	display: inline-block;
+	font-family: inherit;
+}
+
+button.admin-link {
+	all: unset;
+	display: inline-block;
+	background-color: #ffa500;
+	color: black;
+	padding: 6px 12px;
+	border-radius: 20px;
+	font-size: 0.85em;
+	cursor: pointer;
+	text-align: center;
+	transition: background-color 0.3s;
+	font-family: inherit;
+	text-decoration: none;
+}
+
+
+
+.admin-link:hover {
+	background-color: #ff9000;
+}
+
+.user-admin-wrapper {
+	display: flex;
+	align-items: center;
+	gap: 20px;
+}
+
+/**BODY**/
 
 /* Container generale */
 .container {
@@ -154,42 +185,85 @@ body {
 	overflow: hidden;
 	margin-bottom: 3rem;
 	border: 1px solid #dcdcdc;
+	height: 500px;
+	/* ALTEZZA FISSA DELLA CARD */
+	width: 100%;
+	max-width: 1200px;
+	/* LARGHEZZA MASSIMA FISSA */
 }
 
 .book-content {
 	display: flex;
-	min-height: 400px;
+	height: 100%;
+	/* Occupa tutta l'altezza della card fissa */
+	width: 100%;
 }
 
 .book-gallery {
-	flex: 0 0 350px;
+	flex: 0 0 400px;
+	/* LARGHEZZA FISSA - NON CAMBIA MAI */
 	background-color: #f8f9fa;
 	border-right: 3px solid #00b3b3;
-	padding: 1rem;
+	padding: 0;
+	height: 100%;
+	position: relative;
+	overflow: hidden;
 }
 
 .image-carousel {
-	height: 100%;
-	overflow-y: auto;
 	display: flex;
-	flex-direction: column;
+	overflow-x: auto;
+	overflow-y: hidden;
 	gap: 1rem;
+	height: 100%;
+	align-items: center;
+	padding: 1rem;
+	scroll-behavior: smooth;
+	width: 100%;
+}
+
+.image-carousel::-webkit-scrollbar {
+	height: 8px;
+}
+
+.image-carousel::-webkit-scrollbar-track {
+	background-color: #e0e0e0;
+	border-radius: 4px;
+}
+
+.image-carousel::-webkit-scrollbar-thumb {
+	background-color: #00b3b3;
+	border-radius: 4px;
+}
+
+.image-carousel::-webkit-scrollbar-thumb:hover {
+	background-color: #009999;
 }
 
 .carousel-item {
-	flex-shrink: 0;
+	flex: 0 0 auto;
+	height: 100%;
+	display: flex;
+	align-items: center;
 }
 
 .carousel-item img {
-	width: 100%;
-	height: auto;
+	height: 450px;
+	/* ALTEZZA FISSA */
+	width: auto;
+	min-width: 250px;
+	/* LARGHEZZA MINIMA */
+	max-width: 350px;
+	/* LARGHEZZA MASSIMA */
 	border-radius: 8px;
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 	transition: transform 0.3s ease;
+	object-fit: contain;
 }
 
 .carousel-item img:hover {
 	transform: scale(1.05);
+	cursor: pointer;
 }
 
 .no-image-placeholder {
@@ -198,6 +272,7 @@ body {
 	align-items: center;
 	justify-content: center;
 	height: 100%;
+	width: 100%;
 	color: #888;
 }
 
@@ -208,10 +283,16 @@ body {
 
 .book-details {
 	flex: 1;
+	/* OCCUPA LO SPAZIO RESTANTE FISSO */
+	width: calc(100% - 400px);
+	/* LARGHEZZA FISSA (totale - gallery) */
 	padding: 2rem;
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
+	height: 100%;
+	overflow-y: auto;
+	/* Scroll interno se contenuto troppo lungo */
 }
 
 .book-title {
@@ -305,24 +386,23 @@ body {
 }
 
 .action-button.primary {
-	background-color: #00b3b3;
+	background-color: #ffc107;
 	color: white;
 }
 
 .action-button.primary:hover {
-	background-color: #009999;
+	background-color: #e0a800;
 	transform: scale(1.05);
 }
 
 .action-button.secondary {
-	background-color: #f8f9fa;
-	color: #00b3b3;
-	border: 2px solid #00b3b3;
+	background-color: #ffc107;
+	color: white;
 }
 
 .action-button.secondary:hover {
-	background-color: #00b3b3;
-	color: white;
+	background-color: #e0a800;
+	transform: scale(1.05);
 }
 
 /* Sezione recensioni */
@@ -471,6 +551,9 @@ body {
 }
 
 .admin-actions {
+	display: flex;
+	gap: 10px;
+	align-items: center;
 	margin-left: auto;
 }
 
@@ -507,25 +590,37 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+
+	/* Nella media query @media (max-width: 768px) */
+	/* SOSTITUIRE */
 	.book-content {
 		flex-direction: column;
+		height: auto;
+		/* Su mobile l'altezza si adatta al contenuto */
 	}
 
 	.book-gallery {
 		flex: none;
-		height: 250px;
+		height: 300px;
+		/* Altezza fissa per mobile */
 		border-right: none;
 		border-bottom: 3px solid #00b3b3;
 	}
 
 	.image-carousel {
-		flex-direction: row;
-		overflow-x: auto;
-		overflow-y: hidden;
+		position: relative;
+		/* Rimuove il posizionamento assoluto su mobile */
+		top: auto;
+		left: auto;
+		right: auto;
+		bottom: auto;
+		height: 250px;
 	}
 
-	.carousel-item {
-		flex: 0 0 200px;
+	.carousel-item img {
+		height: 200px;
+		/* Altezza ridotta per mobile */
+		max-width: 200px;
 	}
 
 	.book-title {

@@ -25,9 +25,38 @@
 
 			<div class="user-section">
 				<div th:if="${userDetails}">
-					<div class="user-info">
-						<span th:text="${userDetails.username}" class="username">Username</span>
-						<a th:href="@{/profiloUser/{id}(id=${userId})}" class="profile-link">Il mio profilo</a>
+					<div th:if="${isAdmin}">
+						<div class="user-admin-wrapper">
+							<!-- Sezione link admin -->
+							<div class="admin-actions">
+								<a th:href="@{'/admin/modificaBook/' + ${book.id}}" class="admin-link">Modifica</a>
+
+								<form th:action="@{'/admin/eliminaBook/' + ${book.id}}" method="post"
+									style="display:inline;">
+									<button type="submit"
+										onclick="return confirm('Sei sicuro di voler eliminare questo libro? ATTENZIONE: Questa azione è irreversibile');"
+										class="admin-link">Elimina</button>
+								</form>
+							</div>
+
+							<!-- Sezione utente -->
+							<div class="user-section">
+								<div th:if="${userDetails}">
+									<div class="user-info">
+										<span th:text="${userDetails.username}" class="username">Username</span>
+										<a th:href="@{/logout}" class="profile-link">Logout</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div th:if="!${isAdmin}">
+						<div class="user-info">
+							<span th:text="${userDetails.username}" class="username">Username</span>
+							<div th:if="${!isAdmin}">
+								<a th:href="@{/profiloUser/{id}(id=${userId})}" class="profile-link">Il mio profilo</a>
+							</div>
+						</div>
 					</div>
 				</div>
 				<div th:unless="${userDetails}">
@@ -36,547 +65,147 @@
 			</div>
 		</div>
 	</header>
-	
+
 	<main class="main-content">
-	    <div class="container">
-	        <!-- Sezione principale del libro -->
-	        <div class="book-detail-card">
-	            <div class="book-content">
-	                <!-- Galleria immagini a destra -->
-	                <div class="book-gallery">
-	                    <div th:if="${book.imagePaths != null and !book.imagePaths.isEmpty()}" class="image-carousel">
-	                        <div th:each="imgPath : ${book.imagePaths}" class="carousel-item">
-	                            <img th:src="@{${imgPath}}" alt="Immagine libro" />
-	                        </div>
-	                    </div>
-	                    <div th:if="${book.imagePaths == null or book.imagePaths.isEmpty()}" class="no-image-placeholder">
-	                        <span class="placeholder-icon">📖</span>
-	                        <p>Nessuna immagine disponibile</p>
-	                    </div>
-	                </div>
-	                
-	                <!-- Informazioni libro a sinistra -->
-	                <div class="book-details">
-	                    <h1 class="book-title" th:text="${book.title}">Titolo del Libro</h1>
-	                    
-	                    <div class="book-metadata">
-	                        <div class="metadata-item">
-	                            <span class="metadata-label">Anno:</span>
-	                            <a th:href="@{'/booksByYear/' + ${book.year}}" th:text="${book.year}" class="year-link">2020</a>
-	                        </div>
-	                        
-	                        <div class="metadata-item">
-	                            <span class="metadata-label">Autori:</span>
-	                            <div class="authors-list">
-	                                <ul th:if="${book.authors != null and !book.authors.isEmpty()}">
-	                                    <li th:each="a : ${book.authors}">
-	                                        <a th:href="@{'/author/' + ${a.id}}" th:text="${a.name + ' ' + a.surname}" class="author-link">Nome Cognome</a>
-	                                    </li>
-	                                </ul>
-	                                <p th:if="${book.authors == null or book.authors.isEmpty()}" class="no-authors">Nessun autore associato.</p>
-	                            </div>
-	                        </div>
-	                    </div>
-	                    
-	                    <!-- Azioni utente -->
-	                    <div class="user-actions">
-	                        <div th:if="${!isAdmin and userDetails!=null}" class="review-actions">
-	                            <!-- Se l'utente non ha ancora scritto una recensione -->
-	                            <div th:if="${reviewByUser==null}">
-	                                <a th:href="@{'/user/formNewReview/' + ${book.id}}" class="action-button primary">Lascia una recensione</a>
-	                            </div>
-	                            <!-- Se l'utente ha gia scritto una recensione -->
-	                            <div th:if="${reviewByUser!=null}" class="existing-review-actions">
-	                                <span class="review-status">Hai già scritto una recensione per questo libro</span>
-	                                <a th:href="@{'/user/formModificaReview/' + ${book.id}}" class="action-button secondary">Modifica la tua recensione</a>
-	                            </div>
-	                        </div>
-	                        <div th:unless="${userDetails}" class="login-prompt">
-	                            <a href="/login" class="action-button primary">Esegui il Login per lasciare una recensione</a>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	        </div>
-	        
-	        <!-- Sezione recensioni -->
-	        <div class="reviews-section">
-	            <div th:if="${reviewByUser != null or (reviews != null and !reviews.isEmpty())}">
-	                <!-- Recensione dell'utente autenticato -->
-	                <div th:if="${reviewByUser != null}" class="user-review-card">
-	                    <div class="review-header">
-	                        <h2 class="section-title">La tua Recensione</h2>
-	                        <div class="review-actions-buttons">
-	                            <a th:href="@{'/user/formModificaReview/' + ${book.id}}" class="review-button edit">Modifica</a>
-	                            <form th:action="@{'/eliminaReview/' + ${reviewByUser.id}}" method="POST" class="delete-form">
-	                                <button type="submit" class="review-button delete">Elimina</button>
-	                            </form>
-	                        </div>
-	                    </div>
-	                    <div class="review-content">
-	                        <h4 class="review-title" th:text="${reviewByUser.title}">Titolo Recensione</h4>
-	                        <div class="review-rating">
-	                            <span class="rating-label">Voto:</span>
-	                            <span class="rating-value" th:text="${reviewByUser.rating}">8</span>
-	                            <span class="rating-max">/10</span>
-	                        </div>
-	                        <p class="review-text" th:text="${reviewByUser.text}">Testo della recensione</p>
-	                    </div>
-	                </div>
-	                
-	                <!-- Recensioni degli altri utenti -->
-	                <div th:if="${reviews != null and !reviews.isEmpty()}" class="other-reviews">
-	                    <h2 class="section-title">Recensioni degli utenti</h2>
-	                    <div class="reviews-grid">
-	                        <div th:each="review : ${reviews}" class="review-card">
-	                            <div class="review-header">
-	                                <h4 class="review-title" th:text="${review.title}">Titolo Recensione</h4>
-	                                <div th:if="${isAdmin}" class="admin-actions">
-	                                    <form th:action="@{'/eliminaReview/' + ${review.id}}" method="POST" class="delete-form">
-	                                        <button type="submit" class="review-button delete admin">Elimina</button>
-	                                    </form>
-	                                </div>
-	                            </div>
-	                            <div class="review-content">
-	                                <div class="review-rating">
-	                                    <span class="rating-label">Voto:</span>
-	                                    <span class="rating-value" th:text="${review.rating}">8</span>
-	                                    <span class="rating-max">/10</span>
-	                                </div>
-	                                <p class="review-text" th:text="${review.text}">Testo della recensione</p>
-	                                <div class="review-author">
-	                                    <span class="author-label">Recensito da:</span>
-	                                    <a th:href="@{/profiloUser/{id}(id=${review.user.id})}" 
-	                                       th:text="${review.user.name + ' ' + review.user.surname}" 
-	                                       class="author-link">Utente recensione</a>
-	                                </div>
-	                            </div>
-	                        </div>
-	                    </div>
-	                </div>
-	            </div>
-	            
-	            <div th:if="${book.reviews == null or book.reviews.isEmpty()}" class="no-reviews">
-	                <h3 class="no-content-message">Nessuna recensione disponibile per questo libro.</h3>
-	            </div>
-	        </div>
-	        
-	        <!-- Link di ritorno -->
-	        <div class="back-link-section">
-	            <a href="/books" class="back-link">← Torna alla lista dei libri</a>
-	        </div>
-	    </div>
+		<div class="container">
+			<!-- Sezione principale del libro -->
+			<div class="book-detail-card">
+				<div class="book-content">
+					<!-- Galleria immagini a destra -->
+					<div class="book-gallery">
+						<div th:if="${book.imagePaths != null and !book.imagePaths.isEmpty()}" class="image-carousel">
+							<div th:each="imgPath : ${book.imagePaths}" class="carousel-item">
+								<img th:src="@{${imgPath}}" alt="Immagine libro" />
+							</div>
+						</div>
+						<div th:if="${book.imagePaths == null or book.imagePaths.isEmpty()}"
+							class="no-image-placeholder">
+							<span class="placeholder-icon">📖</span>
+							<p>Nessuna immagine disponibile</p>
+						</div>
+					</div>
+
+					<!-- Informazioni libro a sinistra -->
+					<div class="book-details">
+						<h1 class="book-title" th:text="${book.title}">Titolo del Libro</h1>
+
+						<div class="book-metadata">
+							<div class="metadata-item">
+								<span class="metadata-label">Anno:</span>
+								<a th:href="@{'/booksByYear/' + ${book.year}}" th:text="${book.year}"
+									class="year-link">2020</a>
+							</div>
+
+							<div class="metadata-item">
+								<span class="metadata-label">Autori:</span>
+								<div class="authors-list">
+									<ul th:if="${book.authors != null and !book.authors.isEmpty()}">
+										<li th:each="a : ${book.authors}">
+											<a th:href="@{'/author/' + ${a.id}}" th:text="${a.name + ' ' + a.surname}"
+												class="author-link">Nome Cognome</a>
+										</li>
+									</ul>
+									<p th:if="${book.authors == null or book.authors.isEmpty()}" class="no-authors">
+										Nessun autore associato.</p>
+								</div>
+							</div>
+						</div>
+
+						<!-- Azioni utente -->
+						<div class="user-actions">
+							<div th:if="${!isAdmin and userDetails!=null}" class="review-actions">
+								<!-- Se l'utente non ha ancora scritto una recensione -->
+								<div th:if="${reviewByUser==null}">
+									<a th:href="@{'/user/formNewReview/' + ${book.id}}"
+										class="action-button primary">Lascia una recensione</a>
+								</div>
+								<!-- Se l'utente ha gia scritto una recensione -->
+								<div th:if="${reviewByUser!=null}" class="existing-review-actions">
+									<span class="review-status">Hai già scritto una recensione per questo libro</span>
+									<a th:href="@{'/user/formModificaReview/' + ${book.id}}"
+										class="action-button secondary">Modifica la tua recensione</a>
+								</div>
+							</div>
+							<div th:unless="${userDetails}" class="login-prompt">
+								<a href="/login" class="action-button primary">Esegui il Login per lasciare una
+									recensione</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Sezione recensioni -->
+			<div class="reviews-section">
+				<div th:if="${reviewByUser != null or (reviews != null and !reviews.isEmpty())}">
+					<!-- Recensione dell'utente autenticato -->
+					<div th:if="${reviewByUser != null}" class="user-review-card">
+						<div class="review-header">
+							<h2 class="section-title">La tua Recensione</h2>
+							<div class="review-actions-buttons">
+								<a th:href="@{'/user/formModificaReview/' + ${book.id}}"
+									class="review-button edit">Modifica</a>
+								<form th:action="@{'/eliminaReview/' + ${reviewByUser.id}}" method="POST"
+									class="delete-form">
+									<button type="submit" class="review-button delete">Elimina</button>
+								</form>
+							</div>
+						</div>
+						<div class="review-content">
+							<h4 class="review-title" th:text="${reviewByUser.title}">Titolo Recensione</h4>
+							<div class="review-rating">
+								<span class="rating-label">Voto:</span>
+								<span class="rating-value" th:text="${reviewByUser.rating}">8</span>
+								<span class="rating-max">/10</span>
+							</div>
+							<p class="review-text" th:text="${reviewByUser.text}">Testo della recensione</p>
+						</div>
+					</div>
+
+					<!-- Recensioni degli altri utenti -->
+					<div th:if="${reviews != null and !reviews.isEmpty()}" class="other-reviews">
+						<h2 class="section-title">Recensioni degli utenti</h2>
+						<div class="reviews-grid">
+							<div th:each="review : ${reviews}" class="review-card">
+								<div class="review-header">
+									<h4 class="review-title" th:text="${review.title}">Titolo Recensione</h4>
+									<div th:if="${isAdmin}" class="admin-actions">
+										<form th:action="@{'/eliminaReview/' + ${review.id}}" method="POST"
+											class="delete-form">
+											<button type="submit" class="review-button delete admin">Elimina</button>
+										</form>
+									</div>
+								</div>
+								<div class="review-content">
+									<div class="review-rating">
+										<span class="rating-label">Voto:</span>
+										<span class="rating-value" th:text="${review.rating}">8</span>
+										<span class="rating-max">/10</span>
+									</div>
+									<p class="review-text" th:text="${review.text}">Testo della recensione</p>
+									<div class="review-author">
+										<span class="author-label">Recensito da:</span>
+										<a th:href="@{/profiloUser/{id}(id=${review.user.id})}"
+											th:text="${review.user.name + ' ' + review.user.surname}"
+											class="author-link">Utente recensione</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+				<div th:if="${book.reviews == null or book.reviews.isEmpty()}" class="no-reviews">
+					<h3 class="no-content-message">Nessuna recensione disponibile per questo libro.</h3>
+				</div>
+			</div>
+
+			<!-- Link di ritorno -->
+			<div class="back-link-section">
+				<a href="/books" class="back-link">← Torna alla lista dei libri</a>
+			</div>
+		</div>
 	</main>
-
-	<style>
-	/* Stili specifici per la pagina del libro */
-	.book-detail-card {
-	    background-color: white;
-	    border-radius: 15px;
-	    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
-	    overflow: hidden;
-	    margin-bottom: 3rem;
-	    border: 1px solid #dcdcdc;
-	}
-
-	.book-content {
-	    display: flex;
-	    min-height: 400px;
-	}
-
-	.book-gallery {
-	    flex: 0 0 350px;
-	    background-color: #f8f9fa;
-	    border-right: 3px solid #00b3b3;
-	    padding: 1rem;
-	}
-
-	.image-carousel {
-	    height: 100%;
-	    overflow-y: auto;
-	    display: flex;
-	    flex-direction: column;
-	    gap: 1rem;
-	}
-
-	.carousel-item {
-	    flex-shrink: 0;
-	}
-
-	.carousel-item img {
-	    width: 100%;
-	    height: auto;
-	    border-radius: 8px;
-	    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-	    transition: transform 0.3s ease;
-	}
-
-	.carousel-item img:hover {
-	    transform: scale(1.05);
-	}
-
-	.no-image-placeholder {
-	    display: flex;
-	    flex-direction: column;
-	    align-items: center;
-	    justify-content: center;
-	    height: 100%;
-	    color: #888;
-	}
-
-	.placeholder-icon {
-	    font-size: 4rem;
-	    margin-bottom: 1rem;
-	}
-
-	.book-details {
-	    flex: 1;
-	    padding: 2rem;
-	    display: flex;
-	    flex-direction: column;
-	    justify-content: space-between;
-	}
-
-	.book-title {
-	    font-size: 2.2rem;
-	    font-weight: 700;
-	    color: #2f2f2f;
-	    margin-bottom: 2rem;
-	    line-height: 1.3;
-	}
-
-	.book-metadata {
-	    margin-bottom: 2rem;
-	}
-
-	.metadata-item {
-	    margin-bottom: 1.5rem;
-	}
-
-	.metadata-label {
-	    font-weight: 600;
-	    color: #555;
-	    font-size: 1.1rem;
-	    display: inline-block;
-	    margin-right: 0.5rem;
-	}
-
-	.year-link {
-	    color: #00b3b3;
-	    text-decoration: none;
-	    font-weight: 500;
-	    font-size: 1.1rem;
-	}
-
-	.year-link:hover {
-	    text-decoration: underline;
-	}
-
-	.authors-list ul {
-	    list-style: none;
-	    margin: 0.5rem 0 0 0;
-	}
-
-	.authors-list li {
-	    margin-bottom: 0.5rem;
-	}
-
-	.author-link {
-	    color: #00b3b3;
-	    text-decoration: none;
-	    font-weight: 500;
-	    font-size: 1rem;
-	}
-
-	.author-link:hover {
-	    text-decoration: underline;
-	}
-
-	.no-authors {
-	    color: #888;
-	    font-style: italic;
-	    margin: 0.5rem 0 0 0;
-	}
-
-	.user-actions {
-	    margin-top: auto;
-	}
-
-	.review-actions, .existing-review-actions, .login-prompt {
-	    display: flex;
-	    flex-direction: column;
-	    gap: 1rem;
-	}
-
-	.review-status {
-	    color: #555;
-	    font-weight: 500;
-	    margin-bottom: 0.5rem;
-	}
-
-	.action-button {
-	    display: inline-block;
-	    text-decoration: none;
-	    padding: 0.75rem 1.5rem;
-	    border-radius: 25px;
-	    font-weight: 500;
-	    text-align: center;
-	    transition: all 0.3s ease;
-	    font-size: 1rem;
-	}
-
-	.action-button.primary {
-	    background-color: #00b3b3;
-	    color: white;
-	}
-
-	.action-button.primary:hover {
-	    background-color: #009999;
-	    transform: scale(1.05);
-	}
-
-	.action-button.secondary {
-	    background-color: #f8f9fa;
-	    color: #00b3b3;
-	    border: 2px solid #00b3b3;
-	}
-
-	.action-button.secondary:hover {
-	    background-color: #00b3b3;
-	    color: white;
-	}
-
-	/* Sezione recensioni */
-	.reviews-section {
-	    margin-bottom: 3rem;
-	}
-
-	.section-title {
-	    font-size: 1.8rem;
-	    font-weight: 600;
-	    color: #2f2f2f;
-	    margin-bottom: 2rem;
-	    padding-bottom: 0.5rem;
-	    border-bottom: 3px solid #00b3b3;
-	}
-
-	.user-review-card {
-	    background-color: #f0f9ff;
-	    border: 2px solid #00b3b3;
-	    border-radius: 12px;
-	    padding: 2rem;
-	    margin-bottom: 3rem;
-	}
-
-	.review-header {
-	    display: flex;
-	    justify-content: space-between;
-	    align-items: flex-start;
-	    margin-bottom: 1.5rem;
-	}
-
-	.review-actions-buttons {
-	    display: flex;
-	    gap: 1rem;
-	    align-items: center;
-	}
-
-	.delete-form {
-	    margin: 0;
-	}
-
-	.review-button {
-	    padding: 0.5rem 1rem;
-	    border-radius: 20px;
-	    text-decoration: none;
-	    font-size: 0.9rem;
-	    font-weight: 500;
-	    border: none;
-	    cursor: pointer;
-	    transition: all 0.3s ease;
-	}
-
-	.review-button.edit {
-	    background-color: #00b3b3;
-	    color: white;
-	}
-
-	.review-button.edit:hover {
-	    background-color: #009999;
-	}
-
-	.review-button.delete {
-	    background-color: #dc3545;
-	    color: white;
-	}
-
-	.review-button.delete:hover {
-	    background-color: #c82333;
-	}
-
-	.review-button.delete.admin {
-	    background-color: #ffc107;
-	    color: #212529;
-	}
-
-	.review-button.delete.admin:hover {
-	    background-color: #e0a800;
-	}
-
-	.review-content {
-	    padding: 0;
-	}
-
-	.review-title {
-	    font-size: 1.3rem;
-	    font-weight: 600;
-	    color: #2f2f2f;
-	    margin-bottom: 1rem;
-	}
-
-	.review-rating {
-	    margin-bottom: 1rem;
-	    display: flex;
-	    align-items: center;
-	    gap: 0.5rem;
-	}
-
-	.rating-label {
-	    font-weight: 600;
-	    color: #555;
-	}
-
-	.rating-value {
-	    font-size: 1.2rem;
-	    font-weight: 700;
-	    color: #00b3b3;
-	}
-
-	.rating-max {
-	    color: #888;
-	}
-
-	.review-text {
-	    color: #555;
-	    line-height: 1.6;
-	    margin-bottom: 1rem;
-	}
-
-	.other-reviews {
-	    margin-top: 3rem;
-	}
-
-	.reviews-grid {
-	    display: grid;
-	    gap: 2rem;
-	}
-
-	.review-card {
-	    background-color: white;
-	    border-radius: 12px;
-	    padding: 2rem;
-	    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
-	    border: 1px solid #dcdcdc;
-	}
-
-	.review-author {
-	    margin-top: 1rem;
-	    padding-top: 1rem;
-	    border-top: 1px solid #eee;
-	}
-
-	.author-label {
-	    font-style: italic;
-	    color: #888;
-	    margin-right: 0.5rem;
-	}
-
-	.admin-actions {
-	    margin-left: auto;
-	}
-
-	.no-reviews {
-	    text-align: center;
-	    padding: 3rem;
-	    background-color: #f8f9fa;
-	    border-radius: 12px;
-	    margin-bottom: 2rem;
-	}
-
-	.no-content-message {
-	    color: #888;
-	    font-style: italic;
-	}
-
-	.back-link-section {
-	    text-align: center;
-	    margin-top: 2rem;
-	}
-
-	.back-link {
-	    color: #00b3b3;
-	    text-decoration: none;
-	    font-weight: 500;
-	    font-size: 1.1rem;
-	    transition: all 0.3s ease;
-	}
-
-	.back-link:hover {
-	    text-decoration: underline;
-	    color: #009999;
-	}
-
-	/* Responsive Design */
-	@media (max-width: 768px) {
-	    .book-content {
-	        flex-direction: column;
-	    }
-	    
-	    .book-gallery {
-	        flex: none;
-	        height: 250px;
-	        border-right: none;
-	        border-bottom: 3px solid #00b3b3;
-	    }
-	    
-	    .image-carousel {
-	        flex-direction: row;
-	        overflow-x: auto;
-	        overflow-y: hidden;
-	    }
-	    
-	    .carousel-item {
-	        flex: 0 0 200px;
-	    }
-	    
-	    .book-title {
-	        font-size: 1.8rem;
-	    }
-	    
-	    .review-header {
-	        flex-direction: column;
-	        gap: 1rem;
-	    }
-	    
-	    .review-actions-buttons {
-	        align-self: stretch;
-	    }
-	}
-
-	@media (max-width: 480px) {
-	    .book-details {
-	        padding: 1.5rem;
-	    }
-	    
-	    .book-title {
-	        font-size: 1.6rem;
-	    }
-	    
-	    .review-card, .user-review-card {
-	        padding: 1.5rem;
-	    }
-	}
-	</style>
 
 </body>
 

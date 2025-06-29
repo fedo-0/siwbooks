@@ -82,8 +82,15 @@
 									<p th:text="'Anno: ' + ${book.year}">Anno: 2024</p>
 									<p>
 										<span>Autori:</span>
-										<span th:each="author : ${book.authors}"
-											th:text="${author.name} + ' ' + ${author.surname} + ', '">Autore</span>
+										<!-- Nessun autore -->
+									<div th:if="${book.authors == null or book.authors.isEmpty()}">
+										<span>Nessuno</span>
+									</div>
+									<!-- Primo autore -->
+									<div th:if="${book.authors != null and !book.authors.isEmpty()}">
+										<span
+											th:text="${book.authors[0].name + ' ' + book.authors[0].surname + '...'}">Autore</span>
+									</div>
 									</p>
 								</div>
 							</div>
@@ -116,8 +123,15 @@
 								</h3>
 								<p>
 									<span>Libri:</span><br />
-									<span th:each="book : ${author.books}"
-										th:text="${book.title + ' (' + book.year + ')'}"></span><br />
+									<!-- Nessun libro -->
+									<div th:if="${author.books == null or author.books.isEmpty()}">
+										<span>Nessuno</span>
+									</div>
+									<!-- Primo libro -->
+									<div th:if="${author.books != null and !author.books.isEmpty()}">
+										<span
+											th:text="${author.books[0].title + ' (' + author.books[0].year + ') ...'}"></span><br />
+									</div>
 								</p>
 							</div>
 						</div>

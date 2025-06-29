@@ -358,6 +358,84 @@ h4 {
 	text-decoration: underline;
 }
 
+
+
+
+/* Stili migliorati per la visualizzazione degli autori nei libri */
+.book-info .authors-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 0.5rem;
+}
+
+.book-info .author-tag {
+	background-color: #f0f9f9;
+	color: #00b3b3;
+	padding: 0.2rem 0.6rem;
+	border-radius: 12px;
+	font-size: 0.85rem;
+	font-weight: 500;
+	border: 1px solid #e0f2f2;
+	transition: all 0.2s ease;
+}
+
+.book-info .author-tag:hover {
+	background-color: #e0f2f2;
+	transform: translateY(-1px);
+}
+
+.book-info .authors-label {
+	font-weight: 600;
+	color: #555;
+	margin-bottom: 0.3rem;
+	display: block;
+}
+
+
+
+/* Stili migliorati per la visualizzazione dei libri negli autori */
+.author-info .books-list {
+	margin-top: 0.5rem;
+}
+
+.author-info .books-label {
+	font-weight: 600;
+	color: #555;
+	margin-bottom: 0.5rem;
+	display: block;
+}
+
+.author-info .book-item {
+	background-color: #f8f8f8;
+	padding: 0.4rem 0.8rem;
+	margin-bottom: 0.4rem;
+	border-radius: 8px;
+	border-left: 3px solid #00b3b3;
+	transition: all 0.2s ease;
+}
+
+.author-info .book-item:hover {
+	background-color: #f0f9f9;
+	transform: translateX(3px);
+}
+
+.author-info .book-title {
+	color: #333;
+	font-weight: 500;
+	font-size: 0.9rem;
+}
+
+.author-info .book-year {
+	color: #666;
+	font-size: 0.8rem;
+	font-style: italic;
+	margin-left: 0.3rem;
+}
+
+
+
+
 /* ADMIN */
 .admin-section {
 	display: flex;
